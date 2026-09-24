@@ -1,0 +1,423 @@
+import { ExhibitionReportDoc } from "@/types/report";
+
+export const defaultReport: ExhibitionReportDoc = {
+  id: "report-aise-2026",
+  cover: {
+    title: "AI Summit Seoul & EXPO 2026 참관 정리 리포트",
+    subtitle: "현장 프로그램북과 온라인 팩트체크를 바탕으로 정리한 비즈니스 결과 보고서",
+    dateRange: "2026.08.19(수) – 08.21(금)",
+    location: "서울 코엑스 (COEX) Hall B",
+    department: "신사업기획팀 / AI전략TF",
+    author: "박상준 책임연구원",
+    publisher: "카탈로그익스프레스 & 사내 보고서",
+    issueDate: "2026.09",
+    contactEmail: "contact@catalogexpress.kr",
+    website: "catalogexpress.kr",
+  },
+  ch01: {
+    eventName: "AI Summit Seoul & EXPO 2026 (AISE 2026)",
+    dates: "2026.08.19(수) ~ 08.21(금), 3일간",
+    location: "서울 코엑스 (COEX) Hall B",
+    edition: "9회째 (2018년 첫 개최)",
+    host: "DMK Global",
+    organizer: "코엑스 (COEX)",
+    supporters: "한국무역협회 (KITA), 한국관광공사, K Convention, 강남구",
+    metrics: [
+      { label: "참가기업", value: "7개국 118개사", growthBadge: "+66.2%↑", subText: "전년 71개사 대비 대폭 증가" },
+      { label: "부스 수", value: "307개 부스", growthBadge: "+55.8%↑", subText: "전년 197개 부스 대비 확장" },
+      { label: "참관객 수", value: "25,000명 이상", growthBadge: "약 5배↑", subText: "사전등록 기준, 역대 최대 관람객" },
+      { label: "전문가 세션", value: "69개 세션", subText: "키노트 및 트랙별 기술 쇼케이스" },
+    ],
+    sourceNote: "출처: AI Summit Seoul 공식 홈페이지·블로그(aisummit.co.kr), 아시아경제·서울경제 등 언론 보도 종합",
+    noteCallout: {
+      title: "헷갈리기 쉬운 점 — 참고 안내",
+      content: "‘(사)AI EXPO KOREA’는 명칭이 유사하지만 완전히 다른 주최사가 주관하는 별개의 전시회입니다 (2026년 기준 330개사·562부스 규모). 또한 현장 배치도에 로고가 함께 기재된 ‘EV 트렌드코리아’, ‘자율주행모빌리티산업전(AME 2026)’은 동시 개최가 아닌 같은 달 코엑스에서 열린 별도 주간(8/25~27)의 행사입니다.",
+    },
+    sketches: [
+      {
+        id: "s1-1",
+        photoUrl: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&auto=format&fit=crop&q=80",
+        caption: "코엑스 정문 앞 거리에 걸린 AI Summit Seoul & EXPO 2026 공식 배너",
+      },
+      {
+        id: "s1-2",
+        photoUrl: "https://images.unsplash.com/photo-1511578314322-379afb476865?w=800&auto=format&fit=crop&q=80",
+        caption: "전시장 로비에서 모바일 QR 입장권으로 신속하게 체크인하는 참관객들",
+      },
+      {
+        id: "s1-3",
+        photoUrl: "https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=800&auto=format&fit=crop&q=80",
+        caption: "전시장 초입 통로 전경, 이른 아침부터 많은 인파로 붐비는 모습",
+      },
+      {
+        id: "s1-4",
+        photoUrl: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&auto=format&fit=crop&q=80",
+        caption: "시게이트(Seagate) 부스 — 차세대 대용량 AI 스토리지 인프라 전시존",
+      },
+    ],
+  },
+  ch02: {
+    zoneSummary: "전시장은 크게 4개 테마 구역으로 나뉘어 집중 운영되었습니다: ① 산업별 AI 솔루션 존, ② 엔터프라이즈 AI 비즈니스 솔루션 존, ③ 생성형 AI·콘텐츠 혁신 존, ④ AI 체험 및 로봇존. 특히 로봇존에서는 RealMan Robotics, PUDU Robotics 등이 고성능 로봇 제어 및 휴머노이드 시연을 진행해 관람객들의 발길을 끌었습니다.",
+    days: [
+      {
+        id: "day-1",
+        dayLabel: "Day 1 · 8/19(수)",
+        theme: "Mega Trend · AI Startup & Agentic Revolution",
+        sessions: [
+          "기조 세션: “AI에서 AGI로: 에이전트가 바꾸는 일과 미래” — 김대식 교수 (KAIST)",
+          "Security Lens 데모 (GS네오텍), ClickHouse의 AI 플랫폼 옵저버빌리티 구축 전략 세션",
+          "China Tech: 중국 피지컬 AI 스타트업 현장 (Sparks Physical AI Ventures)",
+          "Sionic AI, RealMan Robotics 라이브 데모 세션 진행",
+        ],
+      },
+      {
+        id: "day-2",
+        dayLabel: "Day 2 · 8/20(목)",
+        theme: "New Tech Show Case · Cloud & Hardware Infrastructure",
+        sessions: [
+          "Seagate(고용량 스토리지), You.com(실시간 웹데이터), Bright Data(월드모델 학습 데이터) 세션",
+          "우주 컴퓨팅 인프라 세션 (Beijing LandSpace Hongqing Technology)",
+          "Jamf AI Governance 데모, ElevenLabs의 “Creative to Agentic AI: Voice AI” 세션",
+        ],
+      },
+      {
+        id: "day-3",
+        dayLabel: "Day 3 · 8/21(금)",
+        theme: "Startup Pitch · IR Workshop & Networking",
+        sessions: [
+          "스타트업 피칭 “The PITCH AI Edition” — AI 유망 스타트업 5개사 피칭 및 부스 시연",
+          "한국무역협회 주관 “AI Innovation IR Pitching Day” — 시상식 및 1:1 투자 멘토링",
+          "임팩티브AI 정두희 대표 저자 사인회 & MIT Technology Review 배포 이벤트",
+        ],
+      },
+    ],
+    b2bSummary: "행사 기간 B2B 매칭 프로그램에 약 80개 기업이 참가해 200회 이상의 1:1 비즈니스 상담 및 투자 미팅이 성사되었으며, 차기 행사인 ‘AISE 2027’ 조기 참가 신청 데스크도 성황리에 운영되었습니다.",
+    sketches: [
+      {
+        id: "s2-1",
+        photoUrl: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=800&auto=format&fit=crop&q=80",
+        caption: "로봇 데모존 — 관람객에게 정밀하게 명함을 전달하는 로봇 팔(Robot Arm) 시연",
+      },
+      {
+        id: "s2-2",
+        photoUrl: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&auto=format&fit=crop&q=80",
+        caption: "AI 헬스트레이너 체험존 — 실시간 자세 교정과 비전 인식을 체험하려는 대기 인파",
+      },
+    ],
+  },
+  ch03: {
+    intro: "현장 공식 프로그램북과 부스 배치도를 기반으로 참가기업들을 산업 및 핵심 기술 분야별로 정밀 분류한 지형도입니다.",
+    fields: [
+      {
+        id: "f-1",
+        category: "AI 파운데이션 모델 · 에이전트 · 검색",
+        companies: "Genspark, You.com, Dify, Sionic AI, AiM Future, A.I.Matics, Enhans, Emergine Technology, Impactive AI, Flitto 등",
+      },
+      {
+        id: "f-2",
+        category: "피지컬 AI · 로보틱스 & 하드웨어",
+        companies: "RealMan Robotics, PUDU Robotics, FainRobotics, t54 Labs, DH Autoeye 등",
+      },
+      {
+        id: "f-3",
+        category: "클라우드 · 데이터 인프라 · 엔지니어링",
+        companies: "Oracle, Adobe, BytePlus, ClickHouse, GitLab, Splunk(Cisco), Seagate Technology, CastAI, SambaNova, Bright Data, JetBrains 등",
+      },
+      {
+        id: "f-4",
+        category: "AI 거버넌스 · 보안 · 신뢰성 검증",
+        companies: "Jamf Software, GS Neotek (Security Lens), BSI, ePapyrus 등",
+      },
+      {
+        id: "f-5",
+        category: "엔터프라이즈 생산성 · 협업 · 결제 인프라",
+        companies: "Miro, Notion, Elice, WhaTap, PortOne, Sparta AX 등",
+      },
+      {
+        id: "f-6",
+        category: "음성 · 콘텐츠 · 크리에이티브 AI",
+        companies: "Synthesia, Saltlux Innovation x DeepL, ElevenLabs 등",
+      },
+      {
+        id: "f-7",
+        category: "헬스케어 · 버티컬 특화 산업 AI",
+        companies: "Valent Health, MediFamiSoft, Foretell My Health, SciencePlus 등",
+      },
+      {
+        id: "f-8",
+        category: "정부 및 공공 지원기관",
+        companies: "한국무역협회(KITA, 공동주관), 인공지능산업융합사업단(AICA), 서울주택도시공사 등",
+      },
+    ],
+    source: "출처: 현장 배포 공식 프로그램북 부스 배치도 및 디렉토리 직접 확인",
+  },
+  ch04: {
+    intro: "전체 참가기업 중 기술 혁신성, 투자 유치 규모, 당사 비즈니스 연계 가능성이 높은 핵심 기업 13곳을 선별하여 심층 분석하였습니다.",
+    companies: [
+      {
+        id: "pick-1",
+        name: "Genspark (젠스파크)",
+        profile: "2023년 미국 팔로알토 설립 AI 에이전트 스타트업. AI 검색으로 시작해 노코드 슈퍼에이전트 및 AI 전용 브라우저로 사업 확장 중.",
+        whyPick: "2026년 6월 시리즈 B 확장을 통해 기업가치 26억 달러 달성 (LG 등 투자). 단순 정보 검색을 넘어 다단계 복합 작업을 자동 수행하는 에이전트 워크플로우를 직접 시연함.",
+        source: "Business Wire, Global Venturing (2026)",
+      },
+      {
+        id: "pick-2",
+        name: "ClickHouse (클릭하우스)",
+        profile: "실시간 분석용 오픈소스 컬럼형 데이터베이스 글로벌 선도 기업. 대규모 로그 및 벡터 쿼리 처리에 특화.",
+        whyPick: "최근 LLM 옵저버빌리티 스타트업 Langfuse를 인수하고 시리즈 D 4억 달러 유치(기업가치 150억 달러). AI 에이전트의 호출 비용과 추론 지연 시간을 실시간 추적하는 모니터링 체계 완비.",
+        source: "ClickHouse 공식 블로그, SiliconANGLE",
+      },
+      {
+        id: "pick-3",
+        name: "Sionic AI (사이오닉에이아이)",
+        profile: "네이버 하이퍼클로바 핵심 개발진이 창업한 국내 생성형 AI 스타트업. 기업용 노코드 AI 에이전트 플랫폼 'STORM' 제공.",
+        whyPick: "네이버클라우드, IBK기업은행 등으로부터 250억 원 규모 시리즈 A 유치(누적 300억 원+). 복잡한 사내 사규 및 ERP 데이터를 RAG 기반으로 신속하게 연동하는 실무 솔루션 검증.",
+        source: "한국일보, THE VC",
+      },
+      {
+        id: "pick-4",
+        name: "RealMan Robotics (리얼맨로보틱스)",
+        profile: "경량 로봇 팔 및 차세대 휴머노이드 모듈/부품 전문 글로벌 기업.",
+        whyPick: "CEO가 직접 부스에서 7자유도 초경량 로봇 팔의 실시간 시연을 진행. 협소한 공정 공간에도 안전 펜스 없이 투입 가능한 협동 제어 알고리즘과 합리적인 공급 단가 제시.",
+        source: "로봇신문, COEX 공식 리캡",
+      },
+      {
+        id: "pick-5",
+        name: "PUDU Robotics (푸두로보틱스)",
+        profile: "글로벌 상업용 서비스 로봇 시장점유율 약 23%를 차지하는 배달·물류·청소 로봇 전문 유니콘.",
+        whyPick: "2026년 4월 1억 5,000만 달러 추가 투자 유치(기업가치 15억 달러 초과). 청소 로봇의 경우 도입 시 현장 청소 인건비를 50~70% 절감하는 정량적 RoI 실증 데이터 공개.",
+        source: "The Robot Report, COEX 공식 리캡",
+      },
+      {
+        id: "pick-6",
+        name: "Bright Data (브라이트데이터)",
+        profile: "이스라엘 기반 글로벌 웹 데이터 수집 및 프록시 인프라 1위 기업 (195개국 1.5억+ IP 보유).",
+        whyPick: "글로벌 상위 20개 LLM 연구소 중 14곳이 고객사. 웹상의 멀티모달 데이터 및 실시간 시장 정보를 정제해 파운데이션 모델 및 에이전트 학습 데이터로 공급하는 파이프라인 독점력 확인.",
+        source: "Bright Data 공식 소개 자료",
+      },
+      {
+        id: "pick-7",
+        name: "Jamf (잼프)",
+        profile: "애플 엔터프라이즈 기기 관리(MDM) 나스닥 상장 글로벌 기업 (업력 20년+).",
+        whyPick: "업무용 Mac 내에서 직원이 사용하는 비인가 AI 도구 및 기밀 유출을 통제하는 ‘Jamf AI Governance’ 솔루션 라이브 데모 진행. 강화되는 사내 AI 보안 규정의 현실적 대안.",
+        source: "Jamf 공식 프레스릴리즈",
+      },
+      {
+        id: "pick-8",
+        name: "CastAI (캐스트에이아이)",
+        profile: "쿠버네티스 멀티클라우드 환경의 클라우드 비용을 AI로 자동 최적화하는 플랫폼 기업.",
+        whyPick: "BMW, Hugging Face 등 2,100개+ 글로벌 고객사 확보. 최근 유휴 GPU 스케줄링 기능을 탑재해 천문학적인 AI 인프라 연간 비용을 최대 50%까지 절감하는 실사례 제시.",
+        source: "Cast AI 공식 기술 블로그",
+      },
+      {
+        id: "pick-9",
+        name: "BytePlus (바이트플러스)",
+        profile: "틱톡 모회사 바이트댄스의 글로벌 기업용 B2B AI·클라우드 사업 부문.",
+        whyPick: "행사 공식 골드 스폰서로 참가. 바이트댄스의 검증된 멀티모달 Seed 시리즈 AI 모델 및 추천 알고리즘을 API 형태로 국내 기업에 공급하는 사업 제휴 타진.",
+        source: "BytePlus 공식 발표, AI Business",
+      },
+      {
+        id: "pick-10",
+        name: "Emergine Technology Limited",
+        profile: "생성형 AI 검색 엔진 최적화(GEO, Generative Engine Optimization) 전문 선도 기업.",
+        whyPick: "ChatGPT, Perplexity 등 대화형 AI가 사용자 질문에 답변할 때 특정 기업 브랜드와 제품을 우선 인용하도록 최적화하는 신규 마케팅 분석 툴 글로벌 출범 발표.",
+        source: "Globe Newswire, TechTimes (2026.06)",
+      },
+    ],
+  },
+  ch05: {
+    intro: "컨퍼런스 키노트 아젠다와 현장 부스 인터뷰를 교차 검증하여, 현재 AI 산업을 관통하는 7대 핵심 메가트렌드를 도출하였습니다.",
+    trends: [
+      {
+        id: "t-1",
+        number: "01",
+        title: "에이전틱 AI (Agentic AI) — 모델 개발에서 실무 배포로의 대전환",
+        content: "가트너는 2026년 순수 에이전틱 AI 시장을 약 108억 달러, 에이전트가 내장된 엔터프라이즈 소프트웨어를 포함하면 2,019억 달러 규모로 전망했습니다. 2026년 말까지 엔터프라이즈 애플리케이션의 40%가 업무용 에이전트를 통합할 것으로 내다봤습니다. 모델 자체의 성능 경쟁보다 실제 사내 데이터와 보안 체계에 안전하게 에이전트를 결합하는 툴링(STORM, Dify 등)이 전시관의 중심을 이뤘습니다.",
+        source: "Gartner Newsroom (2026), The Next Web",
+      },
+      {
+        id: "t-2",
+        number: "02",
+        title: "AI 인프라 · 온프레미스 GPU 데이터센터 투자 붐",
+        content: "JP모건 추산으로 2026년 빅5 하이퍼스케일러의 설비투자(CapEx)는 약 6,970억 달러에 달하며, 이 중 75%가 GPU 및 데이터센터에 집중 투입됩니다. 반면 HBM 과점과 패키징 병목으로 블랙웰(B200) 계열 GPU의 표준 리드타임이 36~52주에 달하면서, 데이터 주권을 보호하고 폐쇄망에서 AI 코딩을 지원하는 사내 구축형(On-Premise) 패키지 솔루션 수요가 급증하고 있습니다.",
+        factCheck: {
+          title: "현장에서 들은 이야기, 팩트체크해봤습니다",
+          content: "현장 특정 부스 담당자는 'NVIDIA DGX Spark가 7,800만 원인데, 자사 솔루션은 초기 비용과 1년 운영을 합쳐 4,000만 원'이라고 설명했습니다. 그러나 NVIDIA 공식 DGX Spark 가격은 4,699달러(원화 약 700만~1,000만 원대) 수준이며, 상위 기종인 DGX Station이 약 1억 원대입니다. 즉 7,800만 원이라는 언급은 특정 엔터프라이즈 번들 구성을 의미한 것으로 보이며, 도입 검토 시 정밀한 세부 견적서 대조가 반드시 필요합니다.",
+        },
+        source: "J.P.Morgan, IEEE ComSoc, NVIDIA 공식 발표 자료",
+      },
+      {
+        id: "t-3",
+        number: "03",
+        title: "온디바이스 · 엣지 AI 반도체 (NPU의 부상)",
+        content: "클라우드로 모든 데이터를 전송하지 않고 기기 내부에서 직접 추론을 수행하는 '엣지 AI'가 필수 트렌드로 자리잡았습니다. NPU는 GPU 대비 4~6배 높은 전력 효율을 발휘하며, 통신 지연시간 단축과 프라이버시 보호에 유리합니다. LG전자 첨단연구소 출신들이 창업한 '에임퓨처(AiM Future)'의 신경망 가속 SoC IP 등 경량 엣지 프로세서 전문 기업들의 기술 성숙도가 돋보였습니다.",
+        source: "한국경제 KIW 2026, MarketsandMarkets",
+      },
+      {
+        id: "t-4",
+        number: "04",
+        title: "피지컬 AI · 서비스 로봇의 상용화와 휴머노이드의 실증",
+        content: "2026년 상반기에만 글로벌 휴머노이드 로봇 스타트업에 86억 달러가 투자되며 2025년 연간 총액을 넘어섰습니다. 골드만삭스는 2035년 휴머노이드 시장 기회를 약 1,380억 달러로 상향 조정했습니다. 다만 배달·청소 등 상업 서비스 로봇(2026년 725억 달러 시장)은 이미 명확한 RoI를 입증하며 보급 중인 반면, 사람 형태의 휴머노이드는 아직 실증 및 쇼케이스 단계에 머물러 있어 두 영역을 명확히 구분해 접근해야 합니다.",
+        source: "Goldman Sachs, CNBC, Crunchbase News",
+      },
+      {
+        id: "t-5",
+        number: "05",
+        title: "한국 AI 기본법 시행 — 규제 대응 툴의 시장 선점",
+        content: "「인공지능 발전과 신뢰 기반 조성 등에 관한 기본법」이 2026년 1월 22일부터 공식 시행되었습니다. EU에 이어 전 세계에서 실질적으로 포괄적 AI 법률을 전면 시행하는 첫 사례로 평가됩니다. 법적 계도기간 동안 과태료는 유예되지만, 전시회장에서는 이미 GS네오텍의 Security Lens나 Jamf의 AI 거버넌스처럼 '컴플라이언스 준수를 자동화해 주는 도구'들이 큰 주목을 받았습니다.",
+        source: "법률신문, 신한 법무법인 뉴스레터 (2026)",
+      },
+      {
+        id: "t-6",
+        number: "06",
+        title: "에이전틱 커머스 — AI가 결제와 예약을 대행하는 시대",
+        content: "OpenAI와 Stripe가 공동 개발한 '에이전틱 커머스 프로토콜(ACP)'이 업계 표준으로 급부상하고 있습니다. Visa와 Mastercard도 에이전트 결제 지원 방안을 잇달아 발표했습니다. 국내 결제 인프라를 제공하는 포트원(PortOne) 등 주요 PG사들도 AI 에이전트가 사람 대신 결제를 처리할 수 있는 API 인프라 확장에 집중하고 있습니다.",
+        source: "Stripe Newsroom, Visa Official Press (2026)",
+      },
+      {
+        id: "t-7",
+        number: "07",
+        title: "GEO (생성형 검색 최적화) — 새로운 디지털 브랜드 경쟁",
+        content: "기존 포털 상위 10개 링크에 들기 위한 SEO(검색 최적화)에서 벗어나, ChatGPT, Perplexity, 구글 AI 오버뷰가 답변을 생성할 때 자사 브랜드와 콘텐츠를 출처로 인용하도록 만드는 GEO가 핵심 마케팅 화두로 떠올랐습니다. You.com과 Emergine Technology 등 실시간 웹데이터를 에이전트에 공급하는 기업들이 파트너로 대거 부상했습니다.",
+        source: "Enrich Labs (2026), TechTimes",
+      },
+    ],
+    conclusion: "이번 AI Summit Seoul 2026의 7대 흐름을 한 문장으로 요약하면 이렇습니다: AI 산업의 중심축이 '더 똑똑한 모델을 개발하는 것'에서 '그 모델을 실제 업무·인프라·법률·결제·검색에 안전하고 확실하게 연결하는 것'으로 완전히 이동했습니다. 부스 구성을 관통한 에이전트 빌더, 사내 GPU 서버, 엣지 칩, 거버넌스 도구들은 우리 회사가 향후 시스템을 고도화할 때 최우선으로 검토해야 할 명확한 이정표를 제시하고 있습니다.",
+  },
+  ch06: {
+    intro: "현장 부스에서 직접 수집한 참가기업별 공식 카탈로그 및 기술 사양 브로슈어 안내입니다. 수집된 모든 실물 자료는 고해상도로 디지털 스캔되어 사내 기술 아카이브에 영구 보관됩니다.",
+    sketches: [
+      {
+        id: "s6-1",
+        photoUrl: "https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=800&auto=format&fit=crop&q=80",
+        caption: "솔트룩스 부스 — 다국어 실시간 AI 통번역 라이브 데모 시연 현장",
+      },
+      {
+        id: "s6-2",
+        photoUrl: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&auto=format&fit=crop&q=80",
+        caption: "사이오닉 AI 부스 앞 — 노코드 에이전트 상담을 위해 붐비는 전시장 통로",
+      },
+      {
+        id: "s6-3",
+        photoUrl: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=800&auto=format&fit=crop&q=80",
+        caption: "수어 생성 AI 부스 — 사회적 약자를 위한 배리어프리 기술 시연",
+      },
+      {
+        id: "s6-4",
+        photoUrl: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&auto=format&fit=crop&q=80",
+        caption: "하루 동안 전시장 전역을 돌며 수집한 주요 참가기업 카탈로그 실물 뭉치",
+      },
+    ],
+    serviceTitle: "카탈로그익스프레스 소개",
+    serviceDesc: "카탈로그익스프레스는 전시회 카탈로그를 대신 수집하고, 고해상도 스캔과 OCR로 디지털화해 검색 가능한 PDF 한 권으로 정리해 드리는 서비스입니다. 참가기업을 선별하지 않고 전체를 일괄 수집하며, 전시회에 직접 참석하셨든 안 하셨든 이용하실 수 있습니다.",
+    slogan: "“전시회는 다녀오세요, 정리는 저희가 할게요”",
+    contactEmail: "contact@catalogexpress.kr",
+    website: "catalogexpress.kr",
+    companyName: "영팩토리얼 주식회사",
+  },
+  updatedAt: new Date().toISOString().split("T")[0],
+};
+
+export const emptyReport: ExhibitionReportDoc = {
+  id: "new-report",
+  cover: {
+    title: "2026 전시회 참관 결과 보고서",
+    subtitle: "현장 탐방 및 핵심 기술 분석 결과 보고",
+    dateRange: "",
+    location: "",
+    department: "",
+    author: "",
+    publisher: "사내 공식 보고서",
+    issueDate: new Date().toISOString().slice(0, 7).replace("-", "."),
+    contactEmail: "",
+    website: "",
+  },
+  ch01: {
+    eventName: "",
+    dates: "",
+    location: "",
+    edition: "",
+    host: "",
+    organizer: "",
+    supporters: "",
+    metrics: [
+      { label: "참가기업", value: "", growthBadge: "", subText: "" },
+      { label: "부스 수", value: "", subText: "" },
+      { label: "참관객 수", value: "", subText: "" },
+      { label: "컨퍼런스 세션", value: "", subText: "" },
+    ],
+    sourceNote: "",
+    noteCallout: {
+      title: "참고사항 및 유의점",
+      content: "",
+    },
+    sketches: [],
+  },
+  ch02: {
+    zoneSummary: "",
+    days: [
+      {
+        id: "day-1",
+        dayLabel: "Day 1",
+        theme: "",
+        sessions: [""],
+      },
+    ],
+    b2bSummary: "",
+    sketches: [],
+  },
+  ch03: {
+    intro: "전시회 참가기업들을 주요 기술 및 산업 분야별로 분류한 지형도입니다.",
+    fields: [
+      { id: "f-1", category: "주요 핵심 분야 1", companies: "" },
+      { id: "f-2", category: "주요 핵심 분야 2", companies: "" },
+    ],
+    source: "",
+  },
+  ch04: {
+    intro: "당사 비즈니스 연계 가치가 높은 핵심 기업들을 선별하여 심층 분석하였습니다.",
+    companies: [
+      {
+        id: "pick-1",
+        name: "",
+        profile: "",
+        whyPick: "",
+        source: "",
+      },
+    ],
+  },
+  ch05: {
+    intro: "현장 관람 및 세션 청취를 통해 파악한 핵심 산업 트렌드를 정리하였습니다.",
+    trends: [
+      {
+        id: "t-1",
+        number: "01",
+        title: "",
+        content: "",
+        factCheck: {
+          title: "현장에서 들은 이야기, 팩트체크",
+          content: "",
+        },
+        source: "",
+      },
+    ],
+    conclusion: "",
+  },
+  ch06: {
+    intro: "이 리포트 다음 페이지부터는 현장에서 직접 수집한 참가기업별 카탈로그 원본을 고해상도로 스캔한 자료가 이어집니다. 부스에서 받으셨던 그 자료들을 다시 넘겨보시듯 확인하실 수 있고, 텍스트 검색도 가능합니다.",
+    sketches: [
+      { id: "s6-1", photoUrl: "", caption: "솔트룩스 부스 — 실시간 AI 통번역 데모 화면" },
+      { id: "s6-2", photoUrl: "", caption: "수어 생성 AI 부스 방향, 붐비는 전시장 통로" },
+      { id: "s6-3", photoUrl: "", caption: "사이오닉 AI(Sionic AI) 부스 앞, 붐비는 전시장 통로" },
+      { id: "s6-4", photoUrl: "", caption: "하루 동안 부스를 돌며 모은 카탈로그 뭉치" },
+    ],
+    serviceTitle: "카탈로그익스프레스 소개",
+    serviceDesc: "카탈로그익스프레스는 전시회 카탈로그를 대신 수집하고, 고해상도 스캔과 OCR로 디지털화해 검색 가능한 PDF 한 권으로 정리해 드리는 서비스입니다. 참가기업을 선별하지 않고 전체를 일괄 수집하며, 전시회에 직접 참석하셨든 안 하셨든 이용하실 수 있습니다.",
+    slogan: "“전시회는 다녀오세요, 정리는 저희가 할게요”",
+    contactEmail: "contact@catalogexpress.kr",
+    website: "catalogexpress.kr",
+    companyName: "영팩토리얼 주식회사",
+  },
+  updatedAt: new Date().toISOString().split("T")[0],
+};
