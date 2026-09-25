@@ -1,14 +1,18 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
+import { ExhibitionReportDoc } from "@/types/report";
+import { defaultReport } from "@/data/sampleReport";
+import { quantumExpoReport } from "@/data/quantumReport";
+import { ArchiveItemMeta } from "./ArchiveModal";
 
 interface HeaderProps {
   viewMode: "split" | "editor" | "preview";
   setViewMode: (mode: "split" | "editor" | "preview") => void;
   onPrint: () => void;
   onNewReport: () => void;
-  onLoadQuantum: () => void;
-  onLoadAiSample: () => void;
+  onSelectReport: (report: ExhibitionReportDoc) => void;
+  currentReportId?: string;
   onOpenArchive: () => void;
   onExportJson: () => void;
   onImportJson: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -20,14 +24,106 @@ export const Header: React.FC<HeaderProps> = ({
   setViewMode,
   onPrint,
   onNewReport,
-  onLoadQuantum,
-  onLoadAiSample,
+  onSelectReport,
+  currentReportId,
   onOpenArchive,
   onExportJson,
   onImportJson,
   lastSaved,
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [exhibitions, setExhibitions] = useState<ArchiveItemMeta[]>([]);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    };
+    if (isDropdownOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isDropdownOpen]);
+
+  const loadExhibitions = () => {
+    try {
+      const savedIndex = localStorage.getItem("exhi_reports_archive_index_v1");
+      let list: ArchiveItemMeta[] = savedIndex ? JSON.parse(savedIndex) : [];
+
+      if (!list.some((item) => item.id === quantumExpoReport.id)) {
+        list.unshift({
+          id: quantumExpoReport.id,
+          title: "퀀텀엑스포 2026",
+          eventName: quantumExpoReport.ch01.eventName,
+          dates: quantumExpoReport.cover.dateRange,
+          savedAt: quantumExpoReport.updatedAt || "2026-06",
+        });
+      }
+      if (!list.some((item) => item.id === defaultReport.id)) {
+        list.push({
+          id: defaultReport.id,
+          title: "AI Summit 2026",
+          eventName: defaultReport.ch01.eventName,
+          dates: defaultReport.cover.dateRange,
+          savedAt: defaultReport.updatedAt || "2026-09",
+        });
+      }
+      setExhibitions(list);
+    } catch {
+      setExhibitions([
+        {
+          id: quantumExpoReport.id,
+          title: "퀀텀엑스포 2026",
+          eventName: quantumExpoReport.ch01.eventName,
+          dates: quantumExpoReport.cover.dateRange,
+          savedAt: "2026-06",
+        },
+        {
+          id: defaultReport.id,
+          title: "AI Summit 2026",
+          eventName: defaultReport.ch01.eventName,
+          dates: defaultReport.cover.dateRange,
+          savedAt: "2026-09",
+        },
+      ]);
+    }
+  };
+
+  const handleToggleDropdown = () => {
+    if (!isDropdownOpen) {
+      loadExhibitions();
+    }
+    setIsDropdownOpen((prev) => !prev);
+  };
+
+  const handleSelect = (item: ArchiveItemMeta) => {
+    setIsDropdownOpen(false);
+    if (item.id === quantumExpoReport.id) {
+      onSelectReport(quantumExpoReport);
+      return;
+    }
+    if (item.id === defaultReport.id) {
+      onSelectReport(defaultReport);
+      return;
+    }
+    const docStr = localStorage.getItem(`exhi_doc_${item.id}`);
+    if (docStr) {
+      try {
+        const parsed = JSON.parse(docStr);
+        onSelectReport(parsed);
+        return;
+      } catch (e) {
+        console.error("보고서 파싱 실패", e);
+      }
+    }
+    alert("해당 보고서 데이터를 찾을 수 없습니다.");
+  };
 
   const handleImportClick = () => {
     fileInputRef.current?.click();
@@ -94,23 +190,83 @@ export const Header: React.FC<HeaderProps> = ({
           ✨ 새 보고서
         </button>
 
-        <button
-          type="button"
-          className="btn-header"
-          onClick={onLoadQuantum}
-          title="국제양자산업대전 (QX KOREA 2026) 10페이지 보고서 불러오기"
-        >
-          ⚛️ 퀀텀엑스포 2026
-        </button>
+        {/* 누적 전시회 선택 드롭다운 버튼 */}
+        <div className="exhibition-dropdown-container" ref={dropdownRef}>
+          <button
+            type="button"
+            className={`btn-header exhibition-dropdown-btn ${isDropdownOpen ? "open" : ""}`}
+            onClick={handleToggleDropdown}
+            title="누적된 전시회 목록에서 열람 및 편집할 보고서를 선택합니다"
+          >
+            <span>🏛️ 전시회 선택</span>
+            <span style={{ fontSize: "0.68rem", opacity: 0.85, marginLeft: "2px" }}>
+              {isDropdownOpen ? "▲" : "▼"}
+            </span>
+          </button>
 
-        <button
-          type="button"
-          className="btn-header"
-          onClick={onLoadAiSample}
-          title="AI Summit Seoul 2026 14페이지 모범 샘플 불러오기"
-        >
-          🤖 AI Summit 2026
-        </button>
+          {isDropdownOpen && (
+            <div className="exhibition-dropdown-menu" role="menu">
+              <div className="dropdown-header-title">
+                <span>누적 전시회 목록 ({exhibitions.length})</span>
+                <span style={{ fontSize: "0.7rem", color: "#38BDF8" }}>클릭 시 즉시 전환</span>
+              </div>
+              <div className="dropdown-list">
+                {exhibitions.map((item) => {
+                  const isActive = item.id === currentReportId;
+                  const isQuantum = item.id === quantumExpoReport.id;
+                  const isAi = item.id === defaultReport.id;
+                  const icon = isQuantum ? "⚛️" : isAi ? "🤖" : "📋";
+
+                  return (
+                    <button
+                      key={item.id}
+                      type="button"
+                      className={`dropdown-item ${isActive ? "active" : ""}`}
+                      onClick={() => handleSelect(item)}
+                    >
+                      <div className="dropdown-item-info">
+                        <div className="dropdown-item-title">
+                          <span style={{ marginRight: "6px" }}>{icon}</span>
+                          <span>{item.title}</span>
+                          {isActive && (
+                            <span className="dropdown-active-badge">현재</span>
+                          )}
+                        </div>
+                        <div className="dropdown-item-sub">
+                          {item.eventName ? `${item.eventName} · ` : ""}{item.dates}
+                        </div>
+                      </div>
+                      {isActive && <span style={{ color: "#38BDF8", fontWeight: 700 }}>✓</span>}
+                    </button>
+                  );
+                })}
+              </div>
+
+              <div className="dropdown-divider"></div>
+
+              <button
+                type="button"
+                className="dropdown-footer-btn"
+                onClick={() => {
+                  setIsDropdownOpen(false);
+                  onNewReport();
+                }}
+              >
+                <span>✨ 새 전시회 보고서 작성</span>
+              </button>
+              <button
+                type="button"
+                className="dropdown-footer-btn"
+                onClick={() => {
+                  setIsDropdownOpen(false);
+                  onOpenArchive();
+                }}
+              >
+                <span>📂 보관함 전체 관리...</span>
+              </button>
+            </div>
+          )}
+        </div>
 
         <button
           type="button"

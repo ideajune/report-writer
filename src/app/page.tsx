@@ -175,8 +175,8 @@ export default function Home() {
         setViewMode={setViewMode}
         onPrint={handlePrint}
         onNewReport={handleNewReport}
-        onLoadQuantum={handleLoadQuantum}
-        onLoadAiSample={handleLoadAiSample}
+        onSelectReport={handleReportChange}
+        currentReportId={report.id}
         onOpenArchive={() => setIsArchiveOpen(true)}
         onExportJson={handleExportJson}
         onImportJson={handleImportJson}
