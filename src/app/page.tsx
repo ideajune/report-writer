@@ -17,12 +17,23 @@ export default function Home() {
   const [lastSaved, setLastSaved] = useState<string>("");
   const [mounted, setMounted] = useState<boolean>(false);
   const [isArchiveOpen, setIsArchiveOpen] = useState<boolean>(false);
+  const [editorWidth, setEditorWidth] = useState<number>(520);
+  const [isDragging, setIsDragging] = useState<boolean>(false);
 
   // Initialize from LocalStorage or default to Quantum Expo 2026 report
   useEffect(() => {
     setMounted(true);
     const activeDocId = localStorage.getItem("exhi_active_doc_id_v5");
     const saved = localStorage.getItem(STORAGE_KEY);
+    const savedWidth = localStorage.getItem("exhi_split_editor_width");
+
+    if (savedWidth) {
+      const parsedWidth = parseInt(savedWidth, 10);
+      if (!isNaN(parsedWidth) && parsedWidth >= 320) {
+        setEditorWidth(parsedWidth);
+      }
+    }
+
     if (activeDocId && saved) {
       try {
         const parsed = JSON.parse(saved);
@@ -39,6 +50,47 @@ export default function Home() {
     localStorage.setItem("exhi_active_doc_id_v5", quantumExpoReport.id);
     setLastSaved("방금");
   }, []);
+
+  // Split pane drag resizing logic
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!isDragging) return;
+      const minWidth = 320;
+      const maxWidth = Math.max(minWidth, window.innerWidth - 450);
+      const newWidth = Math.min(Math.max(e.clientX, minWidth), maxWidth);
+      setEditorWidth(newWidth);
+    };
+
+    const handleMouseUp = () => {
+      if (isDragging) {
+        setIsDragging(false);
+      }
+    };
+
+    if (isDragging) {
+      window.addEventListener("mousemove", handleMouseMove);
+      window.addEventListener("mouseup", handleMouseUp);
+      document.body.style.cursor = "col-resize";
+      document.body.style.userSelect = "none";
+    } else {
+      document.body.style.cursor = "";
+      document.body.style.userSelect = "";
+    }
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", handleMouseUp);
+      document.body.style.cursor = "";
+      document.body.style.userSelect = "";
+    };
+  }, [isDragging]);
+
+  // Save editor width preference on change
+  useEffect(() => {
+    if (mounted && typeof window !== "undefined") {
+      localStorage.setItem("exhi_split_editor_width", editorWidth.toString());
+    }
+  }, [editorWidth, mounted]);
 
   // Autosave
   const handleReportChange = (updated: ExhibitionReportDoc) => {
@@ -131,10 +183,32 @@ export default function Home() {
         lastSaved={lastSaved}
       />
 
-      {/* Main Workspace Area */}
-      <div className={`main-workspace view-${viewMode}`}>
-        <Editor report={report} onChange={handleReportChange} />
-        <ReportPreview report={report} />
+      {/* Main Workspace Area with Draggable Resizer */}
+      <div className={`main-workspace view-${viewMode} ${isDragging ? "is-resizing" : ""}`}>
+        <div
+          className="editor-container-wrap"
+          style={viewMode === "split" ? { width: `${editorWidth}px` } : undefined}
+        >
+          <Editor report={report} onChange={handleReportChange} />
+        </div>
+
+        {viewMode === "split" && (
+          <div
+            className="workspace-splitter"
+            onMouseDown={(e) => {
+              e.preventDefault();
+              setIsDragging(true);
+            }}
+            onDoubleClick={() => setEditorWidth(520)}
+            title="마우스로 좌우 드래그하여 분할 비율 조절 (더블클릭 시 520px로 리셋)"
+          >
+            <div className="splitter-handle-bar" />
+          </div>
+        )}
+
+        <div className="preview-container-wrap">
+          <ReportPreview report={report} />
+        </div>
       </div>
 
       {/* Multi-report Archive Management Modal */}

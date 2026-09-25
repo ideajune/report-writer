@@ -181,32 +181,95 @@ body {
   display: flex;
   flex: 1;
   overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+/* Editor & Preview Wrappers */
+.editor-container-wrap {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: 100%;
+  flex-shrink: 0;
+  max-width: 80vw;
+  min-width: 320px;
+}
+
+.preview-container-wrap {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: 100%;
+}
+
+.main-workspace.view-editor .editor-container-wrap {
+  flex: 1;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+.main-workspace.view-editor .preview-container-wrap,
+.main-workspace.view-editor .workspace-splitter {
+  display: none !important;
+}
+
+.main-workspace.view-preview .editor-container-wrap,
+.main-workspace.view-preview .workspace-splitter {
+  display: none !important;
+}
+
+.main-workspace.view-preview .preview-container-wrap {
+  flex: 1;
+  width: 100%;
+}
+
+/* Workspace Resizer Splitter */
+.workspace-splitter {
+  width: 8px;
+  background-color: #E2E8F0;
+  border-left: 1px solid var(--color-border);
+  border-right: 1px solid var(--color-border);
+  cursor: col-resize;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  user-select: none;
+  transition: background-color 0.15s ease;
+  z-index: 25;
+}
+
+.workspace-splitter:hover,
+.main-workspace.is-resizing .workspace-splitter {
+  background-color: #0284C7;
+  border-color: #0369A1;
+}
+
+.splitter-handle-bar {
+  width: 2px;
+  height: 38px;
+  background-color: #94A3B8;
+  border-radius: 2px;
+  transition: background-color 0.15s ease;
+}
+
+.workspace-splitter:hover .splitter-handle-bar,
+.main-workspace.is-resizing .splitter-handle-bar {
+  background-color: #FFFFFF;
 }
 
 /* Editor Pane */
 .editor-pane {
   flex: 1;
-  max-width: 580px;
-  min-width: 440px;
+  width: 100%;
   background-color: #FFFFFF;
-  border-right: 1px solid var(--color-border);
   display: flex;
   flex-direction: column;
   overflow: hidden;
-}
-
-/* Workspace View Modes */
-.main-workspace.view-editor .editor-pane {
-  max-width: 100%;
-  border-right: none;
-}
-
-.main-workspace.view-editor .preview-pane {
-  display: none;
-}
-
-.main-workspace.view-preview .editor-pane {
-  display: none;
 }
 
 .editor-tabs-nav {
@@ -375,13 +438,18 @@ body {
 
 .preview-pane {
   flex: 1;
+  width: 100%;
   background-color: #525659;
-  overflow-y: auto;
+  overflow: auto; /* Enables both horizontal and vertical scrolling */
   padding: 30px 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 24px;
+}
+
+.preview-pane .a4-sheet {
+  flex-shrink: 0; /* Prevents A4 sheet from collapsing horizontally */
 }
 
 /* A4 Sheet Dimensions */
@@ -1194,10 +1262,19 @@ body {
 
   .app-header,
   .editor-pane,
+  .editor-container-wrap,
+  .workspace-splitter,
   .modal-backdrop,
   .view-mode-toggle,
   .save-pill {
     display: none !important;
+  }
+
+  .preview-container-wrap {
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+    overflow: visible !important;
   }
 
   .main-workspace {
