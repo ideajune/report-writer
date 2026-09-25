@@ -511,7 +511,7 @@ export const ReportPreview: React.FC<ReportPreviewProps> = ({ report }) => {
         {ch06.sketches.length > 0 && (
           <div className="sample-ch06-sketches-area">
             <div className="sample-ch06-sketch-title">
-              📷 현장 스케치 — 언어 기술 데모 &amp; 하루의 마무리
+              📷 현장 스케치
             </div>
             <div className="sample-ch06-sketch-grid">
               {ch06.sketches.slice(0, 4).map((sk) => (
