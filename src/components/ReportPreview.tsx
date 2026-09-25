@@ -228,7 +228,7 @@ export const ReportPreview: React.FC<ReportPreviewProps> = ({ report }) => {
       </article>
 
       {/* ========================================================
-          SHEET 3: 02 HIGHLIGHTS
+          SHEET 4: 02 HIGHLIGHTS (일자별 세션 & B2B 성과)
           ======================================================== */}
       <article className="a4-sheet" id="print-ch02">
         <header className="chapter-header">
@@ -237,47 +237,81 @@ export const ReportPreview: React.FC<ReportPreviewProps> = ({ report }) => {
         </header>
 
         {ch02.zoneSummary && (
-          <p className="section-intro-text">{ch02.zoneSummary}</p>
+          <p className="section-intro-text" style={{ marginBottom: "10px", lineHeight: "1.5" }}>
+            {ch02.zoneSummary}
+          </p>
         )}
 
         {/* DAY CARDS */}
         {ch02.days.map((day) => (
-          <div key={day.id} className="day-card">
-            <div className="day-card-header">
+          <div key={day.id} className="day-card" style={{ marginBottom: "8px" }}>
+            <div className="day-card-header" style={{ padding: "6px 12px" }}>
               <span className="day-card-title">{day.dayLabel}</span>
               <span className="day-card-theme">{day.theme}</span>
             </div>
-            <ul className="day-card-list">
+            <ul className="day-card-list" style={{ padding: "6px 14px 6px 26px", lineHeight: "1.45", fontSize: "0.78rem" }}>
               {day.sessions.map((sess, sIdx) => (
-                <li key={sIdx}>{sess}</li>
+                <li key={sIdx} style={{ marginBottom: "2px" }}>{sess}</li>
               ))}
             </ul>
           </div>
         ))}
 
         {ch02.b2bSummary && (
-          <div className="callout-box" style={{ margin: "14px 0" }}>
-            <strong style={{ display: "block", marginBottom: "4px" }}>🤝 B2B 상담 및 부대 프로그램 성과</strong>
-            <span>{ch02.b2bSummary}</span>
+          <div className="callout-box" style={{ margin: "10px 0 6px 0", padding: "10px 14px" }}>
+            <strong style={{ display: "block", marginBottom: "3px" }}>🤝 B2B 상담 및 부대 프로그램 성과</strong>
+            <span style={{ fontSize: "0.79rem", lineHeight: "1.45" }}>{ch02.b2bSummary}</span>
           </div>
         )}
 
+        <footer className="sheet-page-footer">
+          <span>- 4 -</span>
+        </footer>
+      </article>
+
+      {/* ========================================================
+          SHEET 5: 02 HIGHLIGHTS - SKETCHES (현장 스케치 사진 단독 페이지)
+          ======================================================== */}
+      <article className="a4-sheet" id="print-ch02-sketches">
+        <header className="chapter-header">
+          <span className="chapter-number">02</span>
+          <h2 className="chapter-title">현장 하이라이트 — 현장 스케치</h2>
+        </header>
+
+        <p className="section-intro-text">
+          주요 세션 키노트, 전시관 전경 및 기술 데모·체험존 현장 스케치 사진입니다.
+        </p>
+
         {ch02.sketches.length > 0 && (
           <div style={{ marginTop: "14px" }}>
-            <h3 style={{ fontSize: "0.85rem", fontWeight: 700, margin: "10px 0 6px", color: "var(--color-primary)" }}>
-              📸 현장 스케치 — 로봇 데모존 & 체험존
-            </h3>
-            <div className="sketch-grid-4">
+            <div className="sketch-grid-4" style={{ gap: "16px" }}>
               {ch02.sketches.map((sk) => (
-                <div key={sk.id} className="sketch-card">
+                <div key={sk.id} className="sketch-card" style={{ display: "flex", flexDirection: "column" }}>
                   {sk.photoUrl ? (
-                    <img src={sk.photoUrl} alt={sk.caption} className="sketch-img" />
+                    <img
+                      src={sk.photoUrl}
+                      alt={sk.caption}
+                      className="sketch-img"
+                      style={{ height: "195px", objectFit: "cover" }}
+                    />
                   ) : (
-                    <div className="sketch-img" style={{ background: "#E2E8F0", display: "flex", alignItems: "center", justifyContent: "center", color: "#94A3B8" }}>
+                    <div
+                      className="sketch-img"
+                      style={{
+                        height: "195px",
+                        background: "#E2E8F0",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        color: "#94A3B8",
+                      }}
+                    >
                       사진 미등록
                     </div>
                   )}
-                  <div className="sketch-caption">{sk.caption}</div>
+                  <div className="sketch-caption" style={{ padding: "8px 12px", fontSize: "0.78rem" }}>
+                    {sk.caption}
+                  </div>
                 </div>
               ))}
             </div>
@@ -285,7 +319,7 @@ export const ReportPreview: React.FC<ReportPreviewProps> = ({ report }) => {
         )}
 
         <footer className="sheet-page-footer">
-          <span>- 4 -</span>
+          <span>- 5 -</span>
         </footer>
       </article>
 
@@ -324,7 +358,7 @@ export const ReportPreview: React.FC<ReportPreviewProps> = ({ report }) => {
         )}
 
         <footer className="sheet-page-footer">
-          <span>- 5 -</span>
+          <span>- 6 -</span>
         </footer>
       </article>
 
@@ -361,7 +395,7 @@ export const ReportPreview: React.FC<ReportPreviewProps> = ({ report }) => {
         </div>
 
         <footer className="sheet-page-footer">
-          <span>- 6 -</span>
+          <span>- 7 -</span>
         </footer>
       </article>
 
@@ -398,7 +432,7 @@ export const ReportPreview: React.FC<ReportPreviewProps> = ({ report }) => {
         </div>
 
         <footer className="sheet-page-footer">
-          <span>- 7 -</span>
+          <span>- 8 -</span>
         </footer>
       </article>
 
@@ -441,7 +475,7 @@ export const ReportPreview: React.FC<ReportPreviewProps> = ({ report }) => {
         </div>
 
         <footer className="sheet-page-footer">
-          <span>- 8 -</span>
+          <span>- 9 -</span>
         </footer>
       </article>
 
@@ -490,7 +524,7 @@ export const ReportPreview: React.FC<ReportPreviewProps> = ({ report }) => {
         )}
 
         <footer className="sheet-page-footer">
-          <span>- 9 -</span>
+          <span>- 10 -</span>
         </footer>
       </article>
 
@@ -560,7 +594,7 @@ export const ReportPreview: React.FC<ReportPreviewProps> = ({ report }) => {
         </div>
 
         <footer className="sheet-page-footer">
-          <span>- 10 -</span>
+          <span>- 11 -</span>
         </footer>
       </article>
     </main>
