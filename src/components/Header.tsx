@@ -7,7 +7,8 @@ interface HeaderProps {
   setViewMode: (mode: "split" | "editor" | "preview") => void;
   onPrint: () => void;
   onNewReport: () => void;
-  onLoadSample: () => void;
+  onLoadQuantum: () => void;
+  onLoadAiSample: () => void;
   onOpenArchive: () => void;
   onExportJson: () => void;
   onImportJson: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -19,7 +20,8 @@ export const Header: React.FC<HeaderProps> = ({
   setViewMode,
   onPrint,
   onNewReport,
-  onLoadSample,
+  onLoadQuantum,
+  onLoadAiSample,
   onOpenArchive,
   onExportJson,
   onImportJson,
@@ -80,7 +82,7 @@ export const Header: React.FC<HeaderProps> = ({
           onClick={onOpenArchive}
           title="작성했던 여러 전시회 보고서 목록 보기"
         >
-          📂 보고서 보관함
+          📂 보관함
         </button>
 
         <button
@@ -95,10 +97,19 @@ export const Header: React.FC<HeaderProps> = ({
         <button
           type="button"
           className="btn-header"
-          onClick={onLoadSample}
+          onClick={onLoadQuantum}
+          title="국제양자산업대전 (QX KOREA 2026) 10페이지 보고서 불러오기"
+        >
+          ⚛️ 퀀텀엑스포 2026
+        </button>
+
+        <button
+          type="button"
+          className="btn-header"
+          onClick={onLoadAiSample}
           title="AI Summit Seoul 2026 14페이지 모범 샘플 불러오기"
         >
-          📋 샘플 복원
+          🤖 AI Summit 2026
         </button>
 
         <button

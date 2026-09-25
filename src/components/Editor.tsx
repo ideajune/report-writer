@@ -109,41 +109,37 @@ export const Editor: React.FC<EditorProps> = ({ report, onChange }) => {
           <div>
             <div className="form-section-title">리포트 표지 (Cover) 정보</div>
 
+            <div className="callout-box" style={{ marginBottom: "16px", backgroundColor: "#F0F9FF", borderColor: "#BAE6FD" }}>
+              <strong style={{ color: "var(--color-accent)" }}>💡 샘플 PDF 규격 표지 안내</strong>
+              <p style={{ fontSize: "0.8rem", color: "var(--color-text-sub)", marginTop: "4px" }}>
+                첫 페이지(표지)는 공식 샘플 PDF 규격에 맞춰 <strong>[1.제목 / 2.일정 / 3.장소 / 4.날짜]</strong> 4가지 항목이 자동으로 반영됩니다.
+              </p>
+            </div>
+
             <div className="form-group">
-              <label>보고서 메인 타이틀</label>
+              <label>1. 전시회 제목 (메인 타이틀) *</label>
               <input
                 type="text"
                 className="form-input"
                 value={report.cover.title}
                 onChange={(e) => handleCoverChange("title", e.target.value)}
-                placeholder="예: AI Summit Seoul & EXPO 2026 참관 정리 리포트"
-              />
-            </div>
-
-            <div className="form-group">
-              <label>서브타이틀 / 요약 설명</label>
-              <textarea
-                className="form-textarea"
-                style={{ minHeight: "60px" }}
-                value={report.cover.subtitle}
-                onChange={(e) => handleCoverChange("subtitle", e.target.value)}
-                placeholder="예: 현장 프로그램북과 온라인 팩트체크를 바탕으로 정리한 비즈니스 결과 보고서"
+                placeholder="예: 국제양자산업대전 (QX KOREA 2026)"
               />
             </div>
 
             <div className="form-row-2">
               <div className="form-group">
-                <label>참관 일정 (기간)</label>
+                <label>2. 행사 일정 (참관 기간) *</label>
                 <input
                   type="text"
                   className="form-input"
                   value={report.cover.dateRange}
                   onChange={(e) => handleCoverChange("dateRange", e.target.value)}
-                  placeholder="예: 2026.08.19(수) – 08.21(금)"
+                  placeholder="예: 2026.09.09(수) – 09.11(금)"
                 />
               </div>
               <div className="form-group">
-                <label>개최 장소</label>
+                <label>3. 개최 장소 *</label>
                 <input
                   type="text"
                   className="form-input"
@@ -156,17 +152,17 @@ export const Editor: React.FC<EditorProps> = ({ report, onChange }) => {
 
             <div className="form-row-2">
               <div className="form-group">
-                <label>보고 부서</label>
+                <label>4. 발행 일자 (연월) *</label>
                 <input
                   type="text"
                   className="form-input"
-                  value={report.cover.department}
-                  onChange={(e) => handleCoverChange("department", e.target.value)}
-                  placeholder="예: 신사업기획팀 / AI전략TF"
+                  value={report.cover.issueDate}
+                  onChange={(e) => handleCoverChange("issueDate", e.target.value)}
+                  placeholder="예: 2026.09"
                 />
               </div>
               <div className="form-group">
-                <label>작성자 성명</label>
+                <label>작성자 성명 (참고용)</label>
                 <input
                   type="text"
                   className="form-input"
@@ -179,46 +175,23 @@ export const Editor: React.FC<EditorProps> = ({ report, onChange }) => {
 
             <div className="form-row-2">
               <div className="form-group">
-                <label>발행처 / 로고 텍스트</label>
+                <label>보고 부서 (참고용)</label>
                 <input
                   type="text"
                   className="form-input"
-                  value={report.cover.publisher}
-                  onChange={(e) => handleCoverChange("publisher", e.target.value)}
-                  placeholder="예: 카탈로그익스프레스 & 사내 보고서"
+                  value={report.cover.department}
+                  onChange={(e) => handleCoverChange("department", e.target.value)}
+                  placeholder="예: 전략기획팀 / 미래기술연구소"
                 />
               </div>
               <div className="form-group">
-                <label>발행 일자</label>
+                <label>문의처</label>
                 <input
                   type="text"
-                  className="form-input"
-                  value={report.cover.issueDate}
-                  onChange={(e) => handleCoverChange("issueDate", e.target.value)}
-                  placeholder="예: 2026.09"
-                />
-              </div>
-            </div>
-
-            <div className="form-row-2">
-              <div className="form-group">
-                <label>문의 이메일</label>
-                <input
-                  type="email"
                   className="form-input"
                   value={report.cover.contactEmail}
                   onChange={(e) => handleCoverChange("contactEmail", e.target.value)}
-                  placeholder="contact@company.com"
-                />
-              </div>
-              <div className="form-group">
-                <label>웹사이트</label>
-                <input
-                  type="text"
-                  className="form-input"
-                  value={report.cover.website}
-                  onChange={(e) => handleCoverChange("website", e.target.value)}
-                  placeholder="company.kr"
+                  placeholder="contact@catalogexpress.kr"
                 />
               </div>
             </div>

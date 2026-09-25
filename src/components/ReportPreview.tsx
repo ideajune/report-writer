@@ -13,46 +13,45 @@ export const ReportPreview: React.FC<ReportPreviewProps> = ({ report }) => {
   return (
     <main className="preview-pane">
       {/* ========================================================
-          SHEET 1: COVER PAGE (표지)
+          SHEET 1: COVER PAGE (CatalogEXpress 샘플 PDF 규격 표지)
+          4대 동적 항목: 제목, 일정, 장소, 날짜
           ======================================================== */}
       <article className="a4-sheet cover-sheet" id="print-cover">
-        <div className="cover-header-brand">
-          <span className="cover-badge">EXHIBITION BUSINESS REPORT</span>
-          <span style={{ fontSize: "0.82rem", color: "var(--color-text-muted)" }}>
-            {cover.publisher || "비즈니스 참관 결과 보고서"}
-          </span>
+        {/* Top Logo: CatalogEXpress */}
+        <div className="sample-cover-logo-wrap">
+          <img
+            src="/catalogexpress_logo.png"
+            alt="CatalogEXpress"
+            className="catalog-express-logo-img"
+          />
         </div>
 
-        <div className="cover-main-body">
-          <h1 className="cover-title">{cover.title || "전시회 참관 결과 보고서"}</h1>
-          <p className="cover-subtitle">
-            {cover.subtitle || "현장 탐방 및 핵심 기술 분석 결과 보고"}
-          </p>
+        {/* Center Main: 1.제목 / 참관 정리 리포트 / 2.일정 · 3.장소 */}
+        <div className="sample-cover-center-body">
+          <h1 className="sample-cover-title">{cover.title || "전시회 참관 결과 보고서"}</h1>
+          <div className="sample-cover-subtitle">참관 정리 리포트</div>
 
-          <table className="cover-meta-table">
-            <tbody>
-              <tr>
-                <th>행사 기간</th>
-                <td>{cover.dateRange || "일정 미기재"}</td>
-              </tr>
-              <tr>
-                <th>개최 장소</th>
-                <td>{cover.location || "장소 미기재"}</td>
-              </tr>
-              <tr>
-                <th>보고 부서</th>
-                <td>{cover.department || "기획부서"}</td>
-              </tr>
-              <tr>
-                <th>작 성 자</th>
-                <td>{cover.author || "작성자 성명"}</td>
-              </tr>
-              <tr>
-                <th>발행 일자</th>
-                <td>{cover.issueDate || "2026.09"}</td>
-              </tr>
-            </tbody>
-          </table>
+          <div className="sample-cover-info-box">
+            <p className="sample-cover-meta-line">
+              {cover.dateRange || "2026.08.19(수) – 08.21(금)"} · {cover.location || "서울 코엑스(COEX) Hall B"}
+            </p>
+            <p className="sample-cover-desc-line">
+              카탈로그익스프레스가 현장 프로그램북과 온라인 팩트체크를 바탕으로 정리했습니다
+            </p>
+          </div>
+        </div>
+
+        {/* Bottom Section: 스캔본 안내 / 4.날짜 뱃지 / 문의처 */}
+        <div className="sample-cover-footer-area">
+          <p className="sample-cover-note">
+            이 리포트 뒤로 현장에서 수집한 참가기업별 카탈로그 원본 스캔본이 이어집니다.
+          </p>
+          <div className="sample-cover-meta-row">
+            <span className="sample-cover-badge">발행 {cover.issueDate || "2026.09"}</span>
+            <span className="sample-cover-links">
+              catalogexpress.kr · contact@catalogexpress.kr
+            </span>
+          </div>
         </div>
 
         <footer className="sheet-page-footer">
@@ -496,60 +495,64 @@ export const ReportPreview: React.FC<ReportPreviewProps> = ({ report }) => {
       {/* ========================================================
           SHEET 7: 06 GUIDE & ARCHIVE (이 자료 안내)
           ======================================================== */}
-      <article className="a4-sheet" id="print-ch06">
-        <header className="chapter-header">
+      {/* ========================================================
+          SHEET 10: 06 GUIDE & ARCHIVE (이 자료 안내)
+          ======================================================== */}
+      <article className="a4-sheet sample-ch06-sheet" id="print-ch06">
+        <header className="chapter-header sample-ch06-header">
           <span className="chapter-number">06</span>
           <h2 className="chapter-title">이 자료 안내</h2>
         </header>
 
-        <p className="section-intro-text">{ch06.intro}</p>
+        <p className="sample-ch06-intro">
+          이 리포트 다음 페이지부터는 {cover.title.replace(/\n/g, " ")} 현장에서 저희가 직접 수집한 참가기업별 카탈로그 원본을 고해상도로 스캔한 자료가 이어집니다. 부스에서 받으셨던 그 자료들을 다시 넘겨보시듯 확인하실 수 있고, 텍스트 검색도 가능합니다.
+        </p>
 
         {ch06.sketches.length > 0 && (
-          <div style={{ margin: "16px 0" }}>
-            <h3 style={{ fontSize: "0.85rem", fontWeight: 700, margin: "10px 0 6px", color: "var(--color-primary)" }}>
-              📸 현장 스케치 — 언어 기술 데모 & 하루의 마무리
-            </h3>
-            <div className="sketch-grid-4">
-              {ch06.sketches.map((sk) => (
-                <div key={sk.id} className="sketch-card">
+          <div className="sample-ch06-sketches-area">
+            <div className="sample-ch06-sketch-title">
+              📷 현장 스케치 — 언어 기술 데모 &amp; 하루의 마무리
+            </div>
+            <div className="sample-ch06-sketch-grid">
+              {ch06.sketches.slice(0, 4).map((sk) => (
+                <div key={sk.id} className="sample-ch06-sketch-card">
                   {sk.photoUrl ? (
-                    <img src={sk.photoUrl} alt={sk.caption} className="sketch-img" />
+                    <img src={sk.photoUrl} alt={sk.caption} className="sample-ch06-sketch-img" />
                   ) : (
-                    <div className="sketch-img" style={{ background: "#E2E8F0", display: "flex", alignItems: "center", justifyContent: "center", color: "#94A3B8" }}>
+                    <div className="sample-ch06-sketch-img sample-ch06-empty-photo">
                       사진 미등록
                     </div>
                   )}
-                  <div className="sketch-caption">{sk.caption}</div>
+                  <div className="sample-ch06-sketch-caption">{sk.caption}</div>
                 </div>
               ))}
             </div>
           </div>
         )}
 
-        {/* Service Box & Contact matching Original PDF */}
-        <div className="guide-service-box">
-          <h3 className="guide-service-title">{ch06.serviceTitle || "카탈로그익스프레스 소개"}</h3>
-          <p className="guide-service-desc">{ch06.serviceDesc}</p>
+        <div className="sample-ch06-content-wrap">
+          <h3 className="sample-ch06-service-title">카탈로그익스프레스 소개</h3>
+          <p className="sample-ch06-service-desc">
+            카탈로그익스프레스는 전시회 카탈로그를 대신 수집하고, 고해상도 스캔과 OCR로 디지털화해 검색 가능한 PDF 한 권으로 정리해 드리는 서비스입니다. 참가기업을 선별하지 않고 전체를 일괄 수집하며, 전시회에 직접 참석하셨든 안 하셨든 이용하실 수 있습니다.
+          </p>
 
-          {ch06.slogan && (
-            <div className="guide-slogan-highlight">
-              {ch06.slogan}
-            </div>
-          )}
+          <div className="sample-ch06-slogan">
+            “전시회는 다녀오세요, 정리는 저희가 할게요”
+          </div>
 
-          <div className="guide-contact-block">
-            <h4 className="guide-contact-heading">문의</h4>
-            <div className="guide-contact-row">
+          <div className="sample-ch06-contact-block">
+            <h4 className="sample-ch06-contact-heading">문의</h4>
+            <div className="sample-ch06-contact-row">
               <span className="contact-label">이메일</span>
-              <span className="contact-val">{ch06.contactEmail || "contact@catalogexpress.kr"}</span>
+              <span className="contact-val">contact@catalogexpress.kr</span>
             </div>
-            <div className="guide-contact-row">
+            <div className="sample-ch06-contact-row">
               <span className="contact-label">홈페이지</span>
-              <span className="contact-val">{ch06.website || "catalogexpress.kr"}</span>
+              <span className="contact-val">catalogexpress.kr</span>
             </div>
-            <div className="guide-contact-row">
+            <div className="sample-ch06-contact-row">
               <span className="contact-label">운영사</span>
-              <span className="contact-val">{ch06.companyName || "영팩토리얼 주식회사"}</span>
+              <span className="contact-val">영팩토리얼 주식회사</span>
             </div>
           </div>
         </div>

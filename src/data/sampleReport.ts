@@ -286,31 +286,33 @@ export const defaultReport: ExhibitionReportDoc = {
     conclusion: "이번 AI Summit Seoul 2026의 7대 흐름을 한 문장으로 요약하면 이렇습니다: AI 산업의 중심축이 '더 똑똑한 모델을 개발하는 것'에서 '그 모델을 실제 업무·인프라·법률·결제·검색에 안전하고 확실하게 연결하는 것'으로 완전히 이동했습니다. 부스 구성을 관통한 에이전트 빌더, 사내 GPU 서버, 엣지 칩, 거버넌스 도구들은 우리 회사가 향후 시스템을 고도화할 때 최우선으로 검토해야 할 명확한 이정표를 제시하고 있습니다.",
   },
   ch06: {
-    intro: "현장 부스에서 직접 수집한 참가기업별 공식 카탈로그 및 기술 사양 브로슈어 안내입니다. 수집된 모든 실물 자료는 고해상도로 디지털 스캔되어 사내 기술 아카이브에 영구 보관됩니다.",
+    intro:
+      "이 리포트 다음 페이지부터는 AI Summit Seoul & EXPO 2026 현장에서 저희가 직접 수집한 참가기업별 카탈로그 원본을 고해상도로 스캔한 자료가 이어집니다. 부스에서 받으셨던 그 자료들을 다시 넘겨보시듯 확인하실 수 있고, 텍스트 검색도 가능합니다.",
     sketches: [
       {
         id: "s6-1",
-        photoUrl: "https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=800&auto=format&fit=crop&q=80",
-        caption: "솔트룩스 부스 — 다국어 실시간 AI 통번역 라이브 데모 시연 현장",
+        photoUrl: "/sample_sketch_1.jpg",
+        caption: "솔트룩스 부스 — 실시간 AI 통번역 데모 화면",
       },
       {
         id: "s6-2",
-        photoUrl: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&auto=format&fit=crop&q=80",
-        caption: "사이오닉 AI 부스 앞 — 노코드 에이전트 상담을 위해 붐비는 전시장 통로",
+        photoUrl: "/sample_sketch_2.jpg",
+        caption: "수어 생성 AI 부스 방향, 붐비는 전시장 통로",
       },
       {
         id: "s6-3",
-        photoUrl: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=800&auto=format&fit=crop&q=80",
-        caption: "수어 생성 AI 부스 — 사회적 약자를 위한 배리어프리 기술 시연",
+        photoUrl: "/sample_sketch_3.jpg",
+        caption: "사이오닉 AI(Sionic AI) 부스 앞, 붐비는 전시장 통로",
       },
       {
         id: "s6-4",
-        photoUrl: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&auto=format&fit=crop&q=80",
-        caption: "하루 동안 전시장 전역을 돌며 수집한 주요 참가기업 카탈로그 실물 뭉치",
+        photoUrl: "/sample_sketch_4.jpg",
+        caption: "하루 동안 부스를 돌며 모은 카탈로그 뭉치",
       },
     ],
     serviceTitle: "카탈로그익스프레스 소개",
-    serviceDesc: "카탈로그익스프레스는 전시회 카탈로그를 대신 수집하고, 고해상도 스캔과 OCR로 디지털화해 검색 가능한 PDF 한 권으로 정리해 드리는 서비스입니다. 참가기업을 선별하지 않고 전체를 일괄 수집하며, 전시회에 직접 참석하셨든 안 하셨든 이용하실 수 있습니다.",
+    serviceDesc:
+      "카탈로그익스프레스는 전시회 카탈로그를 대신 수집하고, 고해상도 스캔과 OCR로 디지털화해 검색 가능한 PDF 한 권으로 정리해 드리는 서비스입니다. 참가기업을 선별하지 않고 전체를 일괄 수집하며, 전시회에 직접 참석하셨든 안 하셨든 이용하실 수 있습니다.",
     slogan: "“전시회는 다녀오세요, 정리는 저희가 할게요”",
     contactEmail: "contact@catalogexpress.kr",
     website: "catalogexpress.kr",

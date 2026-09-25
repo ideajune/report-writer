@@ -3,33 +3,41 @@
 import React, { useState, useEffect } from "react";
 import { ExhibitionReportDoc } from "@/types/report";
 import { defaultReport, emptyReport } from "@/data/sampleReport";
+import { quantumExpoReport } from "@/data/quantumReport";
 import { Header } from "@/components/Header";
 import { Editor } from "@/components/Editor";
 import { ReportPreview } from "@/components/ReportPreview";
 import { ArchiveModal } from "@/components/ArchiveModal";
 
-const STORAGE_KEY = "exhi_current_report_draft_v2";
+const STORAGE_KEY = "exhi_current_report_draft_v4";
 
 export default function Home() {
-  const [report, setReport] = useState<ExhibitionReportDoc>(defaultReport);
+  const [report, setReport] = useState<ExhibitionReportDoc>(quantumExpoReport);
   const [viewMode, setViewMode] = useState<"split" | "editor" | "preview">("split");
   const [lastSaved, setLastSaved] = useState<string>("");
   const [mounted, setMounted] = useState<boolean>(false);
   const [isArchiveOpen, setIsArchiveOpen] = useState<boolean>(false);
 
-  // Initialize from LocalStorage or default AI Summit Seoul sample
+  // Initialize from LocalStorage or default to Quantum Expo 2026 report
   useEffect(() => {
     setMounted(true);
+    const activeDocId = localStorage.getItem("exhi_active_doc_id_v4");
     const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) {
+    if (activeDocId && saved) {
       try {
         const parsed = JSON.parse(saved);
         setReport(parsed);
         setLastSaved("방금");
+        return;
       } catch (e) {
         console.error("Failed to load saved report draft", e);
       }
     }
+    // Default to Quantum Expo Korea 2026 report on initial load
+    setReport(quantumExpoReport);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(quantumExpoReport));
+    localStorage.setItem("exhi_active_doc_id_v4", quantumExpoReport.id);
+    setLastSaved("방금");
   }, []);
 
   // Autosave
@@ -37,6 +45,7 @@ export default function Home() {
     setReport(updated);
     if (typeof window !== "undefined") {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+      localStorage.setItem("exhi_active_doc_id_v4", updated.id);
       const now = new Date();
       setLastSaved(
         `${now.getHours().toString().padStart(2, "0")}:${now
@@ -62,10 +71,12 @@ export default function Home() {
     }
   };
 
-  const handleLoadSample = () => {
-    if (confirm("AI Summit Seoul 2026 14페이지 모범 레퍼런스 샘플을 다시 불러오시겠습니까?")) {
-      handleReportChange(defaultReport);
-    }
+  const handleLoadQuantum = () => {
+    handleReportChange(quantumExpoReport);
+  };
+
+  const handleLoadAiSample = () => {
+    handleReportChange(defaultReport);
   };
 
   const handleExportJson = () => {
@@ -112,7 +123,8 @@ export default function Home() {
         setViewMode={setViewMode}
         onPrint={handlePrint}
         onNewReport={handleNewReport}
-        onLoadSample={handleLoadSample}
+        onLoadQuantum={handleLoadQuantum}
+        onLoadAiSample={handleLoadAiSample}
         onOpenArchive={() => setIsArchiveOpen(true)}
         onExportJson={handleExportJson}
         onImportJson={handleImportJson}

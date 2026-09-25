@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 import { ExhibitionReportDoc } from "@/types/report";
+import { defaultReport } from "@/data/sampleReport";
+import { quantumExpoReport } from "@/data/quantumReport";
 
 interface ArchiveModalProps {
   isOpen: boolean;
@@ -38,24 +40,41 @@ export const ArchiveModal: React.FC<ArchiveModalProps> = ({
 
   const loadArchiveList = () => {
     try {
-      const savedIndex = localStorage.getItem(ARCHIVE_INDEX_KEY);
-      if (savedIndex) {
-        setArchiveList(JSON.parse(savedIndex));
-      } else {
-        // Initialize with default if not existing
-        const initial = [
-          {
-            id: currentReport.id,
-            title: currentReport.cover.title || "AI Summit Seoul & EXPO 2026",
-            eventName: currentReport.ch01.eventName,
-            dates: currentReport.cover.dateRange,
-            savedAt: currentReport.updatedAt || new Date().toISOString().split("T")[0],
-          },
-        ];
-        localStorage.setItem(ARCHIVE_INDEX_KEY, JSON.stringify(initial));
-        localStorage.setItem(`exhi_doc_${currentReport.id}`, JSON.stringify(currentReport));
-        setArchiveList(initial);
+      // Ensure preset reports are available in doc storage
+      if (!localStorage.getItem(`exhi_doc_${quantumExpoReport.id}`)) {
+        localStorage.setItem(`exhi_doc_${quantumExpoReport.id}`, JSON.stringify(quantumExpoReport));
       }
+      if (!localStorage.getItem(`exhi_doc_${defaultReport.id}`)) {
+        localStorage.setItem(`exhi_doc_${defaultReport.id}`, JSON.stringify(defaultReport));
+      }
+
+      const savedIndex = localStorage.getItem(ARCHIVE_INDEX_KEY);
+      let list: ArchiveItemMeta[] = savedIndex ? JSON.parse(savedIndex) : [];
+
+      // Ensure Quantum Expo is registered
+      if (!list.some((item) => item.id === quantumExpoReport.id)) {
+        list.unshift({
+          id: quantumExpoReport.id,
+          title: quantumExpoReport.cover.title,
+          eventName: quantumExpoReport.ch01.eventName,
+          dates: quantumExpoReport.cover.dateRange,
+          savedAt: quantumExpoReport.updatedAt || "2026-09-25",
+        });
+      }
+
+      // Ensure AI Summit is registered
+      if (!list.some((item) => item.id === defaultReport.id)) {
+        list.push({
+          id: defaultReport.id,
+          title: defaultReport.cover.title,
+          eventName: defaultReport.ch01.eventName,
+          dates: defaultReport.cover.dateRange,
+          savedAt: defaultReport.updatedAt || "2026-09",
+        });
+      }
+
+      localStorage.setItem(ARCHIVE_INDEX_KEY, JSON.stringify(list));
+      setArchiveList(list);
     } catch (e) {
       console.error(e);
     }
