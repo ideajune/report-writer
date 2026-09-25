@@ -9,7 +9,7 @@ import { Editor } from "@/components/Editor";
 import { ReportPreview } from "@/components/ReportPreview";
 import { ArchiveModal } from "@/components/ArchiveModal";
 
-const STORAGE_KEY = "exhi_current_report_draft_v4";
+const STORAGE_KEY = "exhi_current_report_draft_v5";
 
 export default function Home() {
   const [report, setReport] = useState<ExhibitionReportDoc>(quantumExpoReport);
@@ -21,7 +21,7 @@ export default function Home() {
   // Initialize from LocalStorage or default to Quantum Expo 2026 report
   useEffect(() => {
     setMounted(true);
-    const activeDocId = localStorage.getItem("exhi_active_doc_id_v4");
+    const activeDocId = localStorage.getItem("exhi_active_doc_id_v5");
     const saved = localStorage.getItem(STORAGE_KEY);
     if (activeDocId && saved) {
       try {
@@ -36,7 +36,7 @@ export default function Home() {
     // Default to Quantum Expo Korea 2026 report on initial load
     setReport(quantumExpoReport);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(quantumExpoReport));
-    localStorage.setItem("exhi_active_doc_id_v4", quantumExpoReport.id);
+    localStorage.setItem("exhi_active_doc_id_v5", quantumExpoReport.id);
     setLastSaved("방금");
   }, []);
 
@@ -45,7 +45,7 @@ export default function Home() {
     setReport(updated);
     if (typeof window !== "undefined") {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-      localStorage.setItem("exhi_active_doc_id_v4", updated.id);
+      localStorage.setItem("exhi_active_doc_id_v5", updated.id);
       const now = new Date();
       setLastSaved(
         `${now.getHours().toString().padStart(2, "0")}:${now

@@ -4,7 +4,7 @@ export const quantumExpoReport: ExhibitionReportDoc = {
   id: "report-quantum-expo-2026",
   updatedAt: "2026-09-25",
   cover: {
-    title: "국제양자산업대전 (QX KOREA 2026) 참관 결과 보고서",
+    title: "국제양자산업대전 (QX KOREA 2026)",
     subtitle: "글로벌 양자컴퓨팅 상용화 현주소와 포스트 퀀텀 암호(PQC) 전환 대응 전략",
     dateRange: "2026.09.09(수) – 09.11(금)",
     location: "서울 코엑스 (COEX) Hall B (B2)",

@@ -28,7 +28,9 @@ export const ReportPreview: React.FC<ReportPreviewProps> = ({ report }) => {
 
         {/* Center Main: 1.제목 / 참관 정리 리포트 / 2.일정 · 3.장소 */}
         <div className="sample-cover-center-body">
-          <h1 className="sample-cover-title">{cover.title || "전시회 참관 결과 보고서"}</h1>
+          <h1 className="sample-cover-title">
+            {(cover.title || "전시회").replace(/참관\s*(결과|정리)\s*(보고서|리포트)/g, "").trim()}
+          </h1>
           <div className="sample-cover-subtitle">참관 정리 리포트</div>
 
           <div className="sample-cover-info-box">
@@ -505,7 +507,7 @@ export const ReportPreview: React.FC<ReportPreviewProps> = ({ report }) => {
         </header>
 
         <p className="sample-ch06-intro">
-          이 리포트 다음 페이지부터는 {cover.title.replace(/\n/g, " ")} 현장에서 저희가 직접 수집한 참가기업별 카탈로그 원본을 고해상도로 스캔한 자료가 이어집니다. 부스에서 받으셨던 그 자료들을 다시 넘겨보시듯 확인하실 수 있고, 텍스트 검색도 가능합니다.
+          이 리포트 다음 페이지부터는 {(cover.title || "전시회").replace(/참관\s*(결과|정리)\s*(보고서|리포트)/g, "").replace(/\n/g, " ").trim()} 현장에서 저희가 직접 수집한 참가기업별 카탈로그 원본을 고해상도로 스캔한 자료가 이어집니다. 부스에서 받으셨던 그 자료들을 다시 넘겨보시듯 확인하실 수 있고, 텍스트 검색도 가능합니다.
         </p>
 
         {ch06.sketches.length > 0 && (

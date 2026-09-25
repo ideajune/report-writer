@@ -3,7 +3,7 @@ import { ExhibitionReportDoc } from "@/types/report";
 export const defaultReport: ExhibitionReportDoc = {
   id: "report-aise-2026",
   cover: {
-    title: "AI Summit Seoul & EXPO 2026 참관 정리 리포트",
+    title: "AI Summit Seoul & EXPO 2026",
     subtitle: "현장 프로그램북과 온라인 팩트체크를 바탕으로 정리한 비즈니스 결과 보고서",
     dateRange: "2026.08.19(수) – 08.21(금)",
     location: "서울 코엑스 (COEX) Hall B",
@@ -324,7 +324,7 @@ export const defaultReport: ExhibitionReportDoc = {
 export const emptyReport: ExhibitionReportDoc = {
   id: "new-report",
   cover: {
-    title: "2026 전시회 참관 결과 보고서",
+    title: "2026 전시회",
     subtitle: "현장 탐방 및 핵심 기술 분석 결과 보고",
     dateRange: "",
     location: "",
