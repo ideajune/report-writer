@@ -55,11 +55,8 @@ export const ReportPreview: React.FC<ReportPreviewProps> = ({ report }) => {
           </table>
         </div>
 
-        <footer className="cover-footer">
-          <span>발행처: {cover.publisher || "전략기획팀"}</span>
-          <span>
-            문의: {cover.contactEmail || "contact@company.com"} · {cover.website || "company.com"}
-          </span>
+        <footer className="sheet-page-footer">
+          <span>- 1 -</span>
         </footer>
       </article>
 
@@ -67,11 +64,6 @@ export const ReportPreview: React.FC<ReportPreviewProps> = ({ report }) => {
           SHEET 2: TABLE OF CONTENTS (목차 단독 페이지)
           ======================================================== */}
       <article className="a4-sheet toc-sheet" id="print-toc">
-        <div className="doc-top-bar">
-          <span>{cover.title || "전시회 참관 결과 보고서"}</span>
-          <span>목 차 (Table of Contents)</span>
-        </div>
-
         <div className="toc-full-container">
           <header className="toc-main-heading">
             <span>목 차</span>
@@ -139,9 +131,8 @@ export const ReportPreview: React.FC<ReportPreviewProps> = ({ report }) => {
           </div>
         </div>
 
-        <footer className="toc-sheet-footer">
-          <span>{cover.publisher || "전략기획팀"}</span>
-          <span>{cover.issueDate || "2026.09"} 발행</span>
+        <footer className="sheet-page-footer">
+          <span>- 2 -</span>
         </footer>
       </article>
 
@@ -149,11 +140,6 @@ export const ReportPreview: React.FC<ReportPreviewProps> = ({ report }) => {
           SHEET 3: 01 OVERVIEW (01 박람회 개요)
           ======================================================== */}
       <article className="a4-sheet" id="print-ch01">
-        <div className="doc-top-bar">
-          <span>{cover.title}</span>
-          <span>01 박람회 개요</span>
-        </div>
-
         {/* 01 CHAPTER HEADER */}
         <header className="chapter-header">
           <span className="chapter-number">01</span>
@@ -234,17 +220,16 @@ export const ReportPreview: React.FC<ReportPreviewProps> = ({ report }) => {
             </div>
           </div>
         )}
+
+        <footer className="sheet-page-footer">
+          <span>- 3 -</span>
+        </footer>
       </article>
 
       {/* ========================================================
           SHEET 3: 02 HIGHLIGHTS
           ======================================================== */}
       <article className="a4-sheet" id="print-ch02">
-        <div className="doc-top-bar">
-          <span>{cover.title}</span>
-          <span>02 현장 하이라이트</span>
-        </div>
-
         <header className="chapter-header">
           <span className="chapter-number">02</span>
           <h2 className="chapter-title">현장 하이라이트</h2>
@@ -297,17 +282,16 @@ export const ReportPreview: React.FC<ReportPreviewProps> = ({ report }) => {
             </div>
           </div>
         )}
+
+        <footer className="sheet-page-footer">
+          <span>- 4 -</span>
+        </footer>
       </article>
 
       {/* ========================================================
           SHEET 4: 03 LANDSCAPE (참가기업 지형도)
           ======================================================== */}
       <article className="a4-sheet" id="print-ch03">
-        <div className="doc-top-bar">
-          <span>{cover.title}</span>
-          <span>03 참가기업 지형도</span>
-        </div>
-
         <header className="chapter-header">
           <span className="chapter-number">03</span>
           <h2 className="chapter-title">참가기업 지형도</h2>
@@ -337,6 +321,10 @@ export const ReportPreview: React.FC<ReportPreviewProps> = ({ report }) => {
             {ch03.source}
           </p>
         )}
+
+        <footer className="sheet-page-footer">
+          <span>- 5 -</span>
+        </footer>
       </article>
 
       {/* ========================================================
@@ -344,11 +332,6 @@ export const ReportPreview: React.FC<ReportPreviewProps> = ({ report }) => {
           SHEET 5: 04 PICKS - PAGE 1
           ======================================================== */}
       <article className="a4-sheet" id="print-ch04-p1">
-        <div className="doc-top-bar">
-          <span>{cover.title}</span>
-          <span>04 주목할 부스 기업 Pick (1/2)</span>
-        </div>
-
         <header className="chapter-header">
           <span className="chapter-number">04</span>
           <h2 className="chapter-title">주목할 부스 기업 Pick</h2>
@@ -375,17 +358,16 @@ export const ReportPreview: React.FC<ReportPreviewProps> = ({ report }) => {
             </div>
           ))}
         </div>
+
+        <footer className="sheet-page-footer">
+          <span>- 6 -</span>
+        </footer>
       </article>
 
       {/* ========================================================
           SHEET 6: 04 PICKS - PAGE 2
           ======================================================== */}
       <article className="a4-sheet" id="print-ch04-p2">
-        <div className="doc-top-bar">
-          <span>{cover.title}</span>
-          <span>04 주목할 부스 기업 Pick (2/2)</span>
-        </div>
-
         <header className="chapter-header">
           <span className="chapter-number">04</span>
           <h2 className="chapter-title">주목할 부스 기업 Pick (계속)</h2>
@@ -413,17 +395,16 @@ export const ReportPreview: React.FC<ReportPreviewProps> = ({ report }) => {
             );
           })}
         </div>
+
+        <footer className="sheet-page-footer">
+          <span>- 7 -</span>
+        </footer>
       </article>
 
       {/* ========================================================
           SHEET 7: 05 TRENDS - PAGE 1
           ======================================================== */}
       <article className="a4-sheet" id="print-ch05-p1">
-        <div className="doc-top-bar">
-          <span>{cover.title}</span>
-          <span>05 산업 동향 리포트 (1/2)</span>
-        </div>
-
         <header className="chapter-header">
           <span className="chapter-number">05</span>
           <h2 className="chapter-title">산업 동향 리포트</h2>
@@ -457,17 +438,16 @@ export const ReportPreview: React.FC<ReportPreviewProps> = ({ report }) => {
             </div>
           ))}
         </div>
+
+        <footer className="sheet-page-footer">
+          <span>- 8 -</span>
+        </footer>
       </article>
 
       {/* ========================================================
           SHEET 8: 05 TRENDS - PAGE 2
           ======================================================== */}
       <article className="a4-sheet" id="print-ch05-p2">
-        <div className="doc-top-bar">
-          <span>{cover.title}</span>
-          <span>05 산업 동향 리포트 (2/2)</span>
-        </div>
-
         <header className="chapter-header">
           <span className="chapter-number">05</span>
           <h2 className="chapter-title">산업 동향 리포트 (계속)</h2>
@@ -507,17 +487,16 @@ export const ReportPreview: React.FC<ReportPreviewProps> = ({ report }) => {
             <p>{ch05.conclusion}</p>
           </div>
         )}
+
+        <footer className="sheet-page-footer">
+          <span>- 9 -</span>
+        </footer>
       </article>
 
       {/* ========================================================
           SHEET 7: 06 GUIDE & ARCHIVE (이 자료 안내)
           ======================================================== */}
       <article className="a4-sheet" id="print-ch06">
-        <div className="doc-top-bar">
-          <span>{cover.title}</span>
-          <span>06 이 자료 안내</span>
-        </div>
-
         <header className="chapter-header">
           <span className="chapter-number">06</span>
           <h2 className="chapter-title">이 자료 안내</h2>
@@ -574,6 +553,10 @@ export const ReportPreview: React.FC<ReportPreviewProps> = ({ report }) => {
             </div>
           </div>
         </div>
+
+        <footer className="sheet-page-footer">
+          <span>- 10 -</span>
+        </footer>
       </article>
     </main>
   );

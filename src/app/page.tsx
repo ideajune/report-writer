@@ -120,16 +120,9 @@ export default function Home() {
       />
 
       {/* Main Workspace Area */}
-      <div className="main-workspace">
-        {/* Editor Area */}
-        {(viewMode === "split" || viewMode === "editor") && (
-          <Editor report={report} onChange={handleReportChange} />
-        )}
-
-        {/* Live A4 Print/Preview Document */}
-        {(viewMode === "split" || viewMode === "preview") && (
-          <ReportPreview report={report} />
-        )}
+      <div className={`main-workspace view-${viewMode}`}>
+        <Editor report={report} onChange={handleReportChange} />
+        <ReportPreview report={report} />
       </div>
 
       {/* Multi-report Archive Management Modal */}

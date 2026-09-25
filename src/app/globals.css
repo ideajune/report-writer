@@ -195,6 +195,19 @@ body {
   overflow: hidden;
 }
 
+/* Workspace View Modes */
+.main-workspace.view-editor .editor-pane {
+  max-width: 100%;
+  border-right: none;
+}
+.main-workspace.view-editor .preview-pane {
+  display: none;
+}
+
+.main-workspace.view-preview .editor-pane {
+  display: none;
+}
+
 .editor-tabs-nav {
   display: flex;
   overflow-x: auto;
@@ -480,6 +493,20 @@ body {
   align-items: center;
   font-size: 0.78rem;
   color: var(--color-text-muted);
+}
+
+/* Document Page Number Footer */
+.sheet-page-footer {
+  margin-top: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 14px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  letter-spacing: 2px;
+  user-select: none;
 }
 
 /* ========================================================
@@ -1022,9 +1049,34 @@ body {
    PRINT STYLES (@media print)
    ======================================================== */
 @media print {
+  @page {
+    size: A4 portrait;
+    margin: 0; /* Eliminates browser's automatic URL, date, and title print headers/footers */
+  }
+
+  *,
+  *::before,
+  *::after {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  html,
   body {
     background-color: #FFFFFF !important;
     color: #000000 !important;
+    height: auto !important;
+    min-height: auto !important;
+    overflow: visible !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .app-container {
+    height: auto !important;
+    min-height: auto !important;
+    overflow: visible !important;
+    display: block !important;
   }
 
   .app-header,
@@ -1038,25 +1090,39 @@ body {
   .main-workspace {
     display: block !important;
     height: auto !important;
+    min-height: auto !important;
     overflow: visible !important;
+    width: 100% !important;
   }
 
+  .main-workspace.view-editor .preview-pane,
+  .main-workspace.view-preview .preview-pane,
   .preview-pane {
+    display: block !important;
     background: transparent !important;
     padding: 0 !important;
+    margin: 0 !important;
     overflow: visible !important;
-    display: block !important;
+    width: 100% !important;
+    gap: 0 !important;
   }
 
   .a4-sheet {
-    width: 100% !important;
-    min-height: auto !important;
-    padding: 0 !important;
-    margin: 0 !important;
+    box-sizing: border-box !important;
+    width: 210mm !important;
+    height: 296.5mm !important;
+    max-height: 296.5mm !important;
+    padding: 16mm 14mm 10mm 14mm !important;
+    margin: 0 auto !important;
+    overflow: hidden !important;
     box-shadow: none !important;
     border: none !important;
     page-break-after: always !important;
     break-after: page !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    display: flex !important;
+    flex-direction: column !important;
   }
 
   .a4-sheet:last-child {
@@ -1068,13 +1134,36 @@ body {
     break-after: avoid !important;
   }
 
-  .pick-card, .trend-block, .day-card, .metric-card, .sketch-card, .callout-box, .factcheck-box {
+  .doc-top-bar,
+  .cover-footer,
+  .toc-sheet-footer {
+    display: none !important;
+  }
+
+  .sheet-page-footer {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    margin-top: auto !important;
+    padding-top: 6mm !important;
+    padding-bottom: 2mm !important;
+    font-size: 0.85rem !important;
+    color: #64748B !important;
+    letter-spacing: 2px !important;
     break-inside: avoid !important;
     page-break-inside: avoid !important;
   }
 
-  @page {
-    size: A4;
-    margin: 15mm 12mm;
+  .pick-card,
+  .trend-block,
+  .day-card,
+  .metric-card,
+  .sketch-card,
+  .callout-box,
+  .factcheck-box,
+  .cover-meta-table,
+  .landscape-table {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
   }
 }
