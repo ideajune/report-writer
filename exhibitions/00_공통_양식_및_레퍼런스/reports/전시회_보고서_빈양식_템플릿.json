@@ -1,0 +1,145 @@
+{
+  "id": "new-report",
+  "cover": {
+    "title": "2026 전시회",
+    "subtitle": "현장 탐방 및 핵심 기술 분석 결과 보고",
+    "dateRange": "",
+    "location": "",
+    "department": "",
+    "author": "",
+    "publisher": "사내 공식 보고서",
+    "issueDate": "2026.09",
+    "contactEmail": "",
+    "website": ""
+  },
+  "ch01": {
+    "eventName": "",
+    "dates": "",
+    "location": "",
+    "edition": "",
+    "host": "",
+    "organizer": "",
+    "supporters": "",
+    "metrics": [
+      {
+        "label": "참가기업",
+        "value": "",
+        "growthBadge": "",
+        "subText": ""
+      },
+      {
+        "label": "부스 수",
+        "value": "",
+        "subText": ""
+      },
+      {
+        "label": "참관객 수",
+        "value": "",
+        "subText": ""
+      },
+      {
+        "label": "컨퍼런스 세션",
+        "value": "",
+        "subText": ""
+      }
+    ],
+    "sourceNote": "",
+    "noteCallout": {
+      "title": "참고사항 및 유의점",
+      "content": ""
+    },
+    "sketches": []
+  },
+  "ch02": {
+    "zoneSummary": "",
+    "days": [
+      {
+        "id": "day-1",
+        "dayLabel": "Day 1",
+        "theme": "",
+        "sessions": [
+          ""
+        ]
+      }
+    ],
+    "b2bSummary": "",
+    "sketches": []
+  },
+  "ch03": {
+    "intro": "전시회 참가기업들을 주요 기술 및 산업 분야별로 분류한 지형도입니다.",
+    "fields": [
+      {
+        "id": "f-1",
+        "category": "주요 핵심 분야 1",
+        "companies": ""
+      },
+      {
+        "id": "f-2",
+        "category": "주요 핵심 분야 2",
+        "companies": ""
+      }
+    ],
+    "source": ""
+  },
+  "ch04": {
+    "intro": "당사 비즈니스 연계 가치가 높은 핵심 기업들을 선별하여 심층 분석하였습니다.",
+    "companies": [
+      {
+        "id": "pick-1",
+        "name": "",
+        "profile": "",
+        "whyPick": "",
+        "source": ""
+      }
+    ]
+  },
+  "ch05": {
+    "intro": "현장 관람 및 세션 청취를 통해 파악한 핵심 산업 트렌드를 정리하였습니다.",
+    "trends": [
+      {
+        "id": "t-1",
+        "number": "01",
+        "title": "",
+        "content": "",
+        "factCheck": {
+          "title": "현장에서 들은 이야기, 팩트체크",
+          "content": ""
+        },
+        "source": ""
+      }
+    ],
+    "conclusion": ""
+  },
+  "ch06": {
+    "intro": "이 리포트 다음 페이지부터는 현장에서 직접 수집한 참가기업별 카탈로그 원본을 고해상도로 스캔한 자료가 이어집니다. 부스에서 받으셨던 그 자료들을 다시 넘겨보시듯 확인하실 수 있고, 텍스트 검색도 가능합니다.",
+    "sketches": [
+      {
+        "id": "s6-1",
+        "photoUrl": "",
+        "caption": "솔트룩스 부스 — 실시간 AI 통번역 데모 화면"
+      },
+      {
+        "id": "s6-2",
+        "photoUrl": "",
+        "caption": "수어 생성 AI 부스 방향, 붐비는 전시장 통로"
+      },
+      {
+        "id": "s6-3",
+        "photoUrl": "",
+        "caption": "사이오닉 AI(Sionic AI) 부스 앞, 붐비는 전시장 통로"
+      },
+      {
+        "id": "s6-4",
+        "photoUrl": "",
+        "caption": "하루 동안 부스를 돌며 모은 카탈로그 뭉치"
+      }
+    ],
+    "serviceTitle": "카탈로그익스프레스 소개",
+    "serviceDesc": "카탈로그익스프레스는 전시회 카탈로그를 대신 수집하고, 고해상도 스캔과 OCR로 디지털화해 검색 가능한 PDF 한 권으로 정리해 드리는 서비스입니다. 참가기업을 선별하지 않고 전체를 일괄 수집하며, 전시회에 직접 참석하셨든 안 하셨든 이용하실 수 있습니다.",
+    "slogan": "“전시회는 다녀오세요, 정리는 저희가 할게요”",
+    "contactEmail": "contact@catalogexpress.kr",
+    "website": "catalogexpress.kr",
+    "companyName": "영팩토리얼 주식회사"
+  },
+  "updatedAt": "2026-09-28"
+}

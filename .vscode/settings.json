@@ -1,0 +1,27 @@
+{
+    "autoAcceptV2.autoAcceptFileEdits": true,
+    "autoAcceptV2.autoRetryEnabled": true,
+    "autoAcceptV2.pollInterval": 200,
+    "autoAcceptV2.cdpPort": 9333,
+    "autoAcceptV2.customButtonTexts": [
+        "submit",
+        "Submit",
+        "SUBMIT",
+        "proceed",
+        "Proceed",
+        "accept",
+        "Accept",
+        "run",
+        "Run",
+        "allow",
+        "Allow",
+        "always allow",
+        "Always Allow",
+        "승인",
+        "제출",
+        "확인",
+        "실행",
+        "허용",
+        "항상 허용"
+    ]
+}

@@ -10,8 +10,93 @@ interface ReportPreviewProps {
 export const ReportPreview: React.FC<ReportPreviewProps> = ({ report }) => {
   const { cover, ch01, ch02, ch03, ch04, ch05, ch06 } = report;
 
+  // Paginate Ch04: 5 companies per page
+  const CH04_PER_PAGE = 5;
+  const ch04Pages: (typeof ch04.companies)[] = [];
+  if (ch04.companies && ch04.companies.length > 0) {
+    for (let i = 0; i < ch04.companies.length; i += CH04_PER_PAGE) {
+      ch04Pages.push(ch04.companies.slice(i, i + CH04_PER_PAGE));
+    }
+  } else {
+    ch04Pages.push([]);
+  }
+
+  // Paginate Ch05:
+  // If >= 7 trends, distribute across 4 pages: [0,1], [2,3], [4,5], [6..end + conclusion]
+  // If 3..6 trends, distribute across 2 pages
+  const ch05Pages: (typeof ch05.trends)[] = [];
+  if (ch05.trends.length >= 7) {
+    ch05Pages.push(ch05.trends.slice(0, 2));
+    ch05Pages.push(ch05.trends.slice(2, 4));
+    ch05Pages.push(ch05.trends.slice(4, 6));
+    ch05Pages.push(ch05.trends.slice(6));
+  } else if (ch05.trends.length > 2) {
+    const half = Math.ceil(ch05.trends.length / 2);
+    ch05Pages.push(ch05.trends.slice(0, half));
+    ch05Pages.push(ch05.trends.slice(half));
+  } else {
+    ch05Pages.push(ch05.trends);
+  }
+
+  const ch04StartPage = 7;
+  const ch05StartPage = ch04StartPage + ch04Pages.length;
+  const ch06PageNum = ch05StartPage + ch05Pages.length;
+  const totalPages = ch06PageNum;
+
+  // Build page jump list
+  const pageNavList = [
+    { page: 1, label: "표지", id: "print-cover" },
+    { page: 2, label: "목차", id: "print-toc" },
+    { page: 3, label: "01 개요", id: "print-ch01" },
+    { page: 4, label: "02 일정", id: "print-ch02" },
+    { page: 5, label: "02 스케치", id: "print-ch02-sketches" },
+    { page: 6, label: "03 지형도", id: "print-ch03" },
+    ...ch04Pages.map((_, idx) => ({
+      page: ch04StartPage + idx,
+      label: `04 Pick (${idx + 1}P)`,
+      id: `print-ch04-p${idx + 1}`,
+    })),
+    ...ch05Pages.map((_, idx) => ({
+      page: ch05StartPage + idx,
+      label: `05 동향 (${idx + 1}P)`,
+      id: `print-ch05-p${idx + 1}`,
+    })),
+    { page: ch06PageNum, label: "06 자료안내", id: "print-ch06" },
+  ];
+
+  const handleScrollToPage = (elementId: string) => {
+    const el = document.getElementById(elementId);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
+
   return (
     <main className="preview-pane">
+      {/* Sticky Page Navigation Toolbar (화면 상단 고정 네비게이션) */}
+      <div className="preview-nav-bar">
+        <div className="preview-nav-summary">
+          <div className="preview-nav-title-group">
+            <span className="preview-total-badge">📄 총 {totalPages}페이지 구성</span>
+            <span className="preview-report-title">{cover.title || "보고서 미리보기"}</span>
+          </div>
+          <span className="preview-nav-tip">💡 버튼을 클릭하면 해당 페이지로 즉시 스크롤 이동합니다</span>
+        </div>
+        <div className="preview-nav-pills">
+          {pageNavList.map((item) => (
+            <button
+              key={item.id}
+              type="button"
+              className="nav-pill-btn"
+              onClick={() => handleScrollToPage(item.id)}
+              title={`${item.page}페이지 (${item.label})로 바로 이동`}
+            >
+              <span className="pill-num">{item.page}P</span>
+              <span className="pill-label">{item.label}</span>
+            </button>
+          ))}
+        </div>
+      </div>
       {/* ========================================================
           SHEET 1: COVER PAGE (CatalogEXpress 샘플 PDF 규격 표지)
           4대 동적 항목: 제목, 일정, 장소, 날짜
@@ -96,7 +181,7 @@ export const ReportPreview: React.FC<ReportPreviewProps> = ({ report }) => {
             <div className="toc-card-content">
               <h3 className="toc-card-title">참가기업 지형도</h3>
               <p className="toc-card-desc">
-                8대 핵심 기술/산업 분야별 참가기업 분류 및 시장 랜드스케이프 매핑 테이블
+                {ch03.fields?.length ? `${ch03.fields.length}대` : "8대"} 핵심 기술/산업 분야별 참가기업 분류 및 시장 랜드스케이프 매핑 테이블
               </p>
             </div>
           </div>
@@ -106,7 +191,7 @@ export const ReportPreview: React.FC<ReportPreviewProps> = ({ report }) => {
             <div className="toc-card-content">
               <h3 className="toc-card-title">주목할 부스 기업 Pick</h3>
               <p className="toc-card-desc">
-                혁신성 및 당사 비즈니스 연계 가치가 높은 13개 핵심 참가기업 심층 분석 (왜 주목할까)
+                혁신성 및 당사 비즈니스 연계 가치가 높은 {ch04.companies?.length ? `${ch04.companies.length}개` : "10개"} 핵심 참가기업 심층 분석 (왜 주목할까)
               </p>
             </div>
           </div>
@@ -116,7 +201,7 @@ export const ReportPreview: React.FC<ReportPreviewProps> = ({ report }) => {
             <div className="toc-card-content">
               <h3 className="toc-card-title">산업 동향 리포트</h3>
               <p className="toc-card-desc">
-                현재 시장을 관통하는 7대 핵심 메가트렌드 심층 분석 · 현장 팩트체크 · 종합 시사점 총평
+                현재 시장을 관통하는 {ch05.trends?.length ? `${ch05.trends.length}대` : "핵심"} 핵심 메가트렌드 심층 분석 · 현장 팩트체크 · 종합 시사점 총평
               </p>
             </div>
           </div>
@@ -140,7 +225,7 @@ export const ReportPreview: React.FC<ReportPreviewProps> = ({ report }) => {
       {/* ========================================================
           SHEET 3: 01 OVERVIEW (01 박람회 개요)
           ======================================================== */}
-      <article className="a4-sheet" id="print-ch01">
+      <article className="a4-sheet ch01-sheet" id="print-ch01">
         {/* 01 CHAPTER HEADER */}
         <header className="chapter-header">
           <span className="chapter-number">01</span>
@@ -148,7 +233,7 @@ export const ReportPreview: React.FC<ReportPreviewProps> = ({ report }) => {
         </header>
 
         {/* BASIC INFO TABLE */}
-        <table className="landscape-table" style={{ margin: "10px 0" }}>
+        <table className="landscape-table ch01-table">
           <tbody>
             <tr>
               <th style={{ width: "22%" }}>행사명</th>
@@ -177,7 +262,7 @@ export const ReportPreview: React.FC<ReportPreviewProps> = ({ report }) => {
 
         {/* METRICS GRID */}
         {ch01.metrics.length > 0 && (
-          <div className="metrics-grid">
+          <div className="metrics-grid ch01-metrics-grid">
             {ch01.metrics.map((m, idx) => (
               <div key={idx} className="metric-card">
                 <div className="metric-card-label">{m.label}</div>
@@ -191,7 +276,7 @@ export const ReportPreview: React.FC<ReportPreviewProps> = ({ report }) => {
 
         {/* NOTE CALLOUT */}
         {ch01.noteCallout?.content && (
-          <div className="callout-box warning">
+          <div className="callout-box warning ch01-callout">
             <div className="callout-box-title">
               <span>💡 {ch01.noteCallout.title || "참고사항"}</span>
             </div>
@@ -201,21 +286,21 @@ export const ReportPreview: React.FC<ReportPreviewProps> = ({ report }) => {
 
         {/* SKETCHES (4-Grid) */}
         {ch01.sketches.length > 0 && (
-          <div>
-            <h3 style={{ fontSize: "0.85rem", fontWeight: 700, margin: "12px 0 6px", color: "var(--color-primary)" }}>
-              📸 현장 스케치 — 도착부터 전시장 초입까지
+          <div className="ch01-sketches-wrap">
+            <h3 className="ch01-sketches-title">
+              📸 현장 스케치
             </h3>
-            <div className="sketch-grid-4">
+            <div className="sketch-grid-4 ch01-sketch-grid">
               {ch01.sketches.map((sk) => (
-                <div key={sk.id} className="sketch-card">
+                <div key={sk.id} className="sketch-card ch01-sketch-card">
                   {sk.photoUrl ? (
-                    <img src={sk.photoUrl} alt={sk.caption} className="sketch-img" />
+                    <img src={sk.photoUrl} alt={sk.caption} className="sketch-img ch01-sketch-img" />
                   ) : (
-                    <div className="sketch-img" style={{ background: "#E2E8F0", display: "flex", alignItems: "center", justifyContent: "center", color: "#94A3B8", fontSize: "0.75rem" }}>
+                    <div className="sketch-img ch01-sketch-img" style={{ background: "#E2E8F0", display: "flex", alignItems: "center", justifyContent: "center", color: "#94A3B8", fontSize: "0.75rem" }}>
                       사진 미등록
                     </div>
                   )}
-                  <div className="sketch-caption">{sk.caption}</div>
+                  <div className="sketch-caption ch01-sketch-caption">{sk.caption}</div>
                 </div>
               ))}
             </div>
@@ -363,176 +448,113 @@ export const ReportPreview: React.FC<ReportPreviewProps> = ({ report }) => {
       </article>
 
       {/* ========================================================
-      {/* ========================================================
-          SHEET 5: 04 PICKS - PAGE 1
+          SHEET: 04 PICKS (주목할 부스 기업 Pick) - 5개사씩 A4 1페이지 분할
           ======================================================== */}
-      <article className="a4-sheet" id="print-ch04-p1">
-        <header className="chapter-header">
-          <span className="chapter-number">04</span>
-          <h2 className="chapter-title">주목할 부스 기업 Pick</h2>
-        </header>
+      {ch04Pages.map((pageCompanies, pageIdx) => {
+        const pageNum = ch04StartPage + pageIdx;
+        return (
+          <article key={`ch04-p${pageIdx + 1}`} className="a4-sheet" id={`print-ch04-p${pageIdx + 1}`}>
+            <header className="chapter-header">
+              <span className="chapter-number">04</span>
+              <h2 className="chapter-title">
+                {pageIdx === 0 ? "주목할 부스 기업 Pick" : "주목할 부스 기업 Pick (계속)"}
+              </h2>
+            </header>
 
-        <p className="section-intro-text">{ch04.intro}</p>
+            {pageIdx === 0 && <p className="section-intro-text">{ch04.intro}</p>}
 
-        <div className="picks-container">
-          {ch04.companies.slice(0, Math.ceil(ch04.companies.length / 2)).map((comp, idx) => (
-            <div key={comp.id} className="pick-card">
-              <div className="pick-card-header">
-                <span className="pick-card-title">
-                  #{idx + 1} {comp.name}
-                </span>
-              </div>
-              <p className="pick-card-profile">{comp.profile}</p>
-              {comp.whyPick && (
-                <div className="pick-why-box">
-                  <strong>💡 왜 주목할까: </strong>
-                  <span>{comp.whyPick}</span>
-                </div>
-              )}
-              {comp.source && <div className="pick-source">출처: {comp.source}</div>}
-            </div>
-          ))}
-        </div>
-
-        <footer className="sheet-page-footer">
-          <span>- 7 -</span>
-        </footer>
-      </article>
-
-      {/* ========================================================
-          SHEET 6: 04 PICKS - PAGE 2
-          ======================================================== */}
-      <article className="a4-sheet" id="print-ch04-p2">
-        <header className="chapter-header">
-          <span className="chapter-number">04</span>
-          <h2 className="chapter-title">주목할 부스 기업 Pick (계속)</h2>
-        </header>
-
-        <div className="picks-container">
-          {ch04.companies.slice(Math.ceil(ch04.companies.length / 2)).map((comp, idx) => {
-            const actualIdx = Math.ceil(ch04.companies.length / 2) + idx;
-            return (
-              <div key={comp.id} className="pick-card">
-                <div className="pick-card-header">
-                  <span className="pick-card-title">
-                    #{actualIdx + 1} {comp.name}
-                  </span>
-                </div>
-                <p className="pick-card-profile">{comp.profile}</p>
-                {comp.whyPick && (
-                  <div className="pick-why-box">
-                    <strong>💡 왜 주목할까: </strong>
-                    <span>{comp.whyPick}</span>
+            <div className="picks-container">
+              {pageCompanies.map((comp, itemIdx) => {
+                const actualIdx = pageIdx * CH04_PER_PAGE + itemIdx;
+                return (
+                  <div key={comp.id} className="pick-card">
+                    <div className="pick-card-header">
+                      <span className="pick-card-title">
+                        #{actualIdx + 1} {comp.name}
+                      </span>
+                    </div>
+                    <p className="pick-card-profile">{comp.profile}</p>
+                    {comp.whyPick && (
+                      <div className="pick-why-box">
+                        <strong>💡 왜 주목할까: </strong>
+                        <span>{comp.whyPick}</span>
+                      </div>
+                    )}
+                    {comp.source && <div className="pick-source">출처: {comp.source}</div>}
                   </div>
-                )}
-                {comp.source && <div className="pick-source">출처: {comp.source}</div>}
-              </div>
-            );
-          })}
-        </div>
-
-        <footer className="sheet-page-footer">
-          <span>- 8 -</span>
-        </footer>
-      </article>
-
-      {/* ========================================================
-          SHEET 7: 05 TRENDS - PAGE 1
-          ======================================================== */}
-      <article className="a4-sheet" id="print-ch05-p1">
-        <header className="chapter-header">
-          <span className="chapter-number">05</span>
-          <h2 className="chapter-title">산업 동향 리포트</h2>
-        </header>
-
-        <p className="section-intro-text">{ch05.intro}</p>
-
-        <div className="trends-container">
-          {ch05.trends.slice(0, ch05.trends.length <= 4 ? Math.ceil(ch05.trends.length / 2) : 3).map((tr) => (
-            <div key={tr.id} className="trend-block">
-              <div className="trend-title-line">
-                <span className="trend-badge">{tr.number}</span>
-                <span className="trend-title-text">{tr.title}</span>
-              </div>
-              <p className="trend-body">{tr.content}</p>
-
-              {tr.factCheck?.content && (
-                <div className="factcheck-box">
-                  <div className="factcheck-title">
-                    <span>🔍 {tr.factCheck.title || "현장 팩트체크"}</span>
-                  </div>
-                  <div>{tr.factCheck.content}</div>
-                </div>
-              )}
-
-              {tr.source && (
-                <div style={{ fontSize: "0.7rem", color: "var(--color-text-muted)", textAlign: "right" }}>
-                  출처: {tr.source}
-                </div>
-              )}
+                );
+              })}
             </div>
-          ))}
-        </div>
 
-        <footer className="sheet-page-footer">
-          <span>- 9 -</span>
-        </footer>
-      </article>
+            <footer className="sheet-page-footer">
+              <span>- {pageNum} -</span>
+            </footer>
+          </article>
+        );
+      })}
 
       {/* ========================================================
-          SHEET 8: 05 TRENDS - PAGE 2
+          SHEET: 05 TRENDS (산업 동향 리포트) - 4페이지 분할 심층 분석
           ======================================================== */}
-      <article className="a4-sheet" id="print-ch05-p2">
-        <header className="chapter-header">
-          <span className="chapter-number">05</span>
-          <h2 className="chapter-title">산업 동향 리포트 (계속)</h2>
-        </header>
+      {ch05Pages.map((pageTrends, pageIdx) => {
+        const isFirst = pageIdx === 0;
+        const isLast = pageIdx === ch05Pages.length - 1;
+        const pageNum = ch05StartPage + pageIdx;
 
-        <div className="trends-container">
-          {ch05.trends.slice(ch05.trends.length <= 4 ? Math.ceil(ch05.trends.length / 2) : 3).map((tr) => (
-            <div key={tr.id} className="trend-block">
-              <div className="trend-title-line">
-                <span className="trend-badge">{tr.number}</span>
-                <span className="trend-title-text">{tr.title}</span>
-              </div>
-              <p className="trend-body">{tr.content}</p>
+        return (
+          <article key={`ch05-p${pageIdx + 1}`} className="a4-sheet" id={`print-ch05-p${pageIdx + 1}`}>
+            <header className="chapter-header">
+              <span className="chapter-number">05</span>
+              <h2 className="chapter-title">
+                {isFirst ? "산업 동향 리포트" : "산업 동향 리포트 (계속)"}
+              </h2>
+            </header>
 
-              {tr.factCheck?.content && (
-                <div className="factcheck-box">
-                  <div className="factcheck-title">
-                    <span>🔍 {tr.factCheck.title || "현장 팩트체크"}</span>
+            {isFirst && <p className="section-intro-text">{ch05.intro}</p>}
+
+            <div className="trends-container">
+              {pageTrends.map((tr) => (
+                <div key={tr.id} className="trend-block">
+                  <div className="trend-title-line">
+                    <span className="trend-badge">{tr.number}</span>
+                    <span className="trend-title-text">{tr.title}</span>
                   </div>
-                  <div>{tr.factCheck.content}</div>
-                </div>
-              )}
+                  <p className="trend-body">{tr.content}</p>
 
-              {tr.source && (
-                <div style={{ fontSize: "0.7rem", color: "var(--color-text-muted)", textAlign: "right" }}>
-                  출처: {tr.source}
+                  {tr.factCheck?.content && (
+                    <div className="factcheck-box">
+                      <div className="factcheck-title">
+                        <span>🔍 {tr.factCheck.title || "현장 팩트체크"}</span>
+                      </div>
+                      <div>{tr.factCheck.content}</div>
+                    </div>
+                  )}
+
+                  {tr.source && (
+                    <div style={{ fontSize: "0.7rem", color: "var(--color-text-muted)", textAlign: "right" }}>
+                      출처: {tr.source}
+                    </div>
+                  )}
                 </div>
-              )}
+              ))}
             </div>
-          ))}
-        </div>
 
-        {/* CONCLUSION BOX */}
-        {ch05.conclusion && (
-          <div className="conclusion-box">
-            <div className="conclusion-title">📌 [종합] 현장에서 확인한 것 & 핵심 시사점</div>
-            <p>{ch05.conclusion}</p>
-          </div>
-        )}
+            {isLast && ch05.conclusion && (
+              <div className="conclusion-box">
+                <div className="conclusion-title">📌 [종합] 현장에서 확인한 것 & 핵심 시사점</div>
+                <p>{ch05.conclusion}</p>
+              </div>
+            )}
 
-        <footer className="sheet-page-footer">
-          <span>- 10 -</span>
-        </footer>
-      </article>
+            <footer className="sheet-page-footer">
+              <span>- {pageNum} -</span>
+            </footer>
+          </article>
+        );
+      })}
 
       {/* ========================================================
-          SHEET 7: 06 GUIDE & ARCHIVE (이 자료 안내)
-          ======================================================== */}
-      {/* ========================================================
-          SHEET 10: 06 GUIDE & ARCHIVE (이 자료 안내)
+          SHEET: 06 GUIDE & ARCHIVE (이 자료 안내)
           ======================================================== */}
       <article className="a4-sheet sample-ch06-sheet" id="print-ch06">
         <header className="chapter-header sample-ch06-header">
@@ -594,7 +616,7 @@ export const ReportPreview: React.FC<ReportPreviewProps> = ({ report }) => {
         </div>
 
         <footer className="sheet-page-footer">
-          <span>- 11 -</span>
+          <span>- {ch06PageNum} -</span>
         </footer>
       </article>
     </main>

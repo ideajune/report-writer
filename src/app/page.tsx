@@ -4,12 +4,14 @@ import React, { useState, useEffect } from "react";
 import { ExhibitionReportDoc } from "@/types/report";
 import { defaultReport, emptyReport } from "@/data/sampleReport";
 import { quantumExpoReport } from "@/data/quantumReport";
+import { aiFestaReport } from "@/data/aiFestaReport";
 import { Header } from "@/components/Header";
 import { Editor } from "@/components/Editor";
 import { ReportPreview } from "@/components/ReportPreview";
 import { ArchiveModal } from "@/components/ArchiveModal";
 
-const STORAGE_KEY = "exhi_current_report_draft_v5";
+const STORAGE_KEY = "exhi_current_report_draft_v8";
+const ACTIVE_DOC_KEY = "exhi_active_doc_id_v8";
 
 export default function Home() {
   const [report, setReport] = useState<ExhibitionReportDoc>(quantumExpoReport);
@@ -20,10 +22,10 @@ export default function Home() {
   const [editorWidth, setEditorWidth] = useState<number>(520);
   const [isDragging, setIsDragging] = useState<boolean>(false);
 
-  // Initialize from LocalStorage or default to Quantum Expo 2026 report
+  // Initialize from LocalStorage or default to Quantum Expo Korea 2026 (15P) report
   useEffect(() => {
     setMounted(true);
-    const activeDocId = localStorage.getItem("exhi_active_doc_id_v5");
+    const activeDocId = localStorage.getItem(ACTIVE_DOC_KEY);
     const saved = localStorage.getItem(STORAGE_KEY);
     const savedWidth = localStorage.getItem("exhi_split_editor_width");
 
@@ -36,7 +38,13 @@ export default function Home() {
 
     if (activeDocId && saved) {
       try {
-        const parsed = JSON.parse(saved);
+        let parsed = JSON.parse(saved);
+        if (parsed.id === quantumExpoReport.id) {
+          // Always ensure the latest 20 companies and 7 trends (15 pages)
+          parsed = quantumExpoReport;
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(quantumExpoReport));
+          localStorage.setItem(`exhi_doc_${quantumExpoReport.id}`, JSON.stringify(quantumExpoReport));
+        }
         setReport(parsed);
         setLastSaved("방금");
         return;
@@ -44,10 +52,10 @@ export default function Home() {
         console.error("Failed to load saved report draft", e);
       }
     }
-    // Default to Quantum Expo Korea 2026 report on initial load
+    // Default to Quantum Expo Korea 2026 (15P) report on initial load
     setReport(quantumExpoReport);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(quantumExpoReport));
-    localStorage.setItem("exhi_active_doc_id_v5", quantumExpoReport.id);
+    localStorage.setItem(ACTIVE_DOC_KEY, quantumExpoReport.id);
     setLastSaved("방금");
   }, []);
 
@@ -97,7 +105,7 @@ export default function Home() {
     setReport(updated);
     if (typeof window !== "undefined") {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-      localStorage.setItem("exhi_active_doc_id_v5", updated.id);
+      localStorage.setItem(ACTIVE_DOC_KEY, updated.id);
       const now = new Date();
       setLastSaved(
         `${now.getHours().toString().padStart(2, "0")}:${now

@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { ExhibitionReportDoc } from "@/types/report";
 import { defaultReport } from "@/data/sampleReport";
 import { quantumExpoReport } from "@/data/quantumReport";
+import { aiFestaReport } from "@/data/aiFestaReport";
 
 interface ArchiveModalProps {
   isOpen: boolean;
@@ -40,20 +41,28 @@ export const ArchiveModal: React.FC<ArchiveModalProps> = ({
 
   const loadArchiveList = () => {
     try {
-      // Ensure preset reports are available in doc storage
-      if (!localStorage.getItem(`exhi_doc_${quantumExpoReport.id}`)) {
-        localStorage.setItem(`exhi_doc_${quantumExpoReport.id}`, JSON.stringify(quantumExpoReport));
-      }
-      if (!localStorage.getItem(`exhi_doc_${defaultReport.id}`)) {
-        localStorage.setItem(`exhi_doc_${defaultReport.id}`, JSON.stringify(defaultReport));
-      }
+      // Always sync preset reports with latest data definitions
+      localStorage.setItem(`exhi_doc_${aiFestaReport.id}`, JSON.stringify(aiFestaReport));
+      localStorage.setItem(`exhi_doc_${quantumExpoReport.id}`, JSON.stringify(quantumExpoReport));
+      localStorage.setItem(`exhi_doc_${defaultReport.id}`, JSON.stringify(defaultReport));
 
       const savedIndex = localStorage.getItem(ARCHIVE_INDEX_KEY);
       let list: ArchiveItemMeta[] = savedIndex ? JSON.parse(savedIndex) : [];
 
+      // Ensure AI Festa is registered
+      if (!list.some((item) => item.id === aiFestaReport.id)) {
+        list.unshift({
+          id: aiFestaReport.id,
+          title: aiFestaReport.cover.title,
+          eventName: aiFestaReport.ch01.eventName,
+          dates: aiFestaReport.cover.dateRange,
+          savedAt: aiFestaReport.updatedAt || "2026-09-27",
+        });
+      }
+
       // Ensure Quantum Expo is registered
       if (!list.some((item) => item.id === quantumExpoReport.id)) {
-        list.unshift({
+        list.push({
           id: quantumExpoReport.id,
           title: quantumExpoReport.cover.title,
           eventName: quantumExpoReport.ch01.eventName,

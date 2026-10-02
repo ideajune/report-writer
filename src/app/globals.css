@@ -128,6 +128,45 @@ body {
   box-shadow: var(--shadow-sm);
 }
 
+/* Quick Exhibition Switcher Tabs in Header */
+.quick-exhibition-tabs {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background-color: rgba(255, 255, 255, 0.08);
+  padding: 3px 4px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.quick-tab-btn {
+  background: transparent;
+  border: none;
+  color: #94A3B8;
+  font-size: 0.76rem;
+  font-weight: 600;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+}
+
+.quick-tab-btn:hover {
+  color: #FFFFFF;
+  background-color: rgba(255, 255, 255, 0.12);
+}
+
+.quick-tab-btn.active {
+  background: #0284C7;
+  color: #FFFFFF;
+  box-shadow: 0 1px 4px rgba(2, 132, 199, 0.4);
+  font-weight: 700;
+}
+
 /* Header Buttons */
 .btn-header {
   display: inline-flex;
@@ -596,6 +635,107 @@ body {
   flex-shrink: 0; /* Prevents A4 sheet from collapsing horizontally */
 }
 
+/* Sticky Page Navigation Toolbar */
+.preview-nav-bar {
+  position: sticky;
+  top: -10px;
+  z-index: 40;
+  width: 100%;
+  max-width: 210mm;
+  background: rgba(15, 23, 42, 0.94);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45);
+  border-radius: 12px;
+  padding: 10px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 8px;
+  flex-shrink: 0;
+}
+
+.preview-nav-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.preview-nav-title-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.preview-total-badge {
+  background: linear-gradient(135deg, #0284C7, #2563EB);
+  color: #FFFFFF;
+  font-weight: 800;
+  font-size: 0.78rem;
+  padding: 3px 10px;
+  border-radius: 20px;
+  box-shadow: 0 2px 6px rgba(2, 132, 199, 0.4);
+  white-space: nowrap;
+}
+
+.preview-report-title {
+  color: #F1F5F9;
+  font-size: 0.84rem;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 320px;
+}
+
+.preview-nav-tip {
+  font-size: 0.73rem;
+  color: #94A3B8;
+}
+
+.preview-nav-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.nav-pill-btn {
+  background: #1E293B;
+  color: #E2E8F0;
+  border: 1px solid #334155;
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.15s ease;
+}
+
+.nav-pill-btn:hover {
+  background: #0284C7;
+  color: #FFFFFF;
+  border-color: #38BDF8;
+  transform: translateY(-1px);
+}
+
+.nav-pill-btn .pill-num {
+  background: rgba(255, 255, 255, 0.15);
+  padding: 1px 4px;
+  border-radius: 3px;
+  font-weight: 700;
+}
+
+.nav-pill-btn .pill-label {
+  font-size: 0.7rem;
+}
+
+
 /* A4 Sheet Dimensions */
 .a4-sheet {
   width: 210mm;
@@ -976,6 +1116,108 @@ body {
   border-top: 1px solid var(--color-border);
 }
 
+/* ========================================================
+   CHAPTER 01 OVERVIEW SHEET OPTIMIZATION (Prevent Overflow)
+   ======================================================== */
+.ch01-sheet .chapter-header {
+  margin-bottom: 8px;
+  padding-bottom: 6px;
+}
+
+.ch01-table {
+  margin: 6px 0 !important;
+  font-size: 0.77rem;
+}
+
+.ch01-table th,
+.ch01-table td {
+  padding: 5px 10px;
+  line-height: 1.35;
+}
+
+.ch01-metrics-grid {
+  margin: 8px 0;
+  gap: 8px;
+}
+
+.ch01-metrics-grid .metric-card {
+  padding: 7px 6px;
+}
+
+.ch01-metrics-grid .metric-card-label {
+  font-size: 0.70rem;
+  margin-bottom: 2px;
+}
+
+.ch01-metrics-grid .metric-card-value {
+  font-size: 0.98rem;
+  margin-bottom: 2px;
+}
+
+.ch01-metrics-grid .metric-badge {
+  font-size: 0.64rem;
+  padding: 1px 5px;
+}
+
+.ch01-metrics-grid .metric-sub {
+  font-size: 0.63rem;
+  margin-top: 2px;
+}
+
+.ch01-callout {
+  margin: 8px 0;
+  padding: 7px 12px;
+  font-size: 0.76rem;
+  line-height: 1.45;
+}
+
+.ch01-callout .callout-box-title {
+  font-size: 0.79rem;
+  margin-bottom: 3px;
+}
+
+.ch01-sketches-title {
+  font-size: 0.80rem;
+  font-weight: 700;
+  margin: 6px 0 4px;
+  color: var(--color-primary);
+}
+
+.ch01-sketch-grid {
+  margin: 4px 0 6px 0;
+  gap: 8px;
+}
+
+.ch01-sketch-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.ch01-sketch-img {
+  height: 96px !important;
+  width: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.ch01-sketch-caption {
+  font-size: 0.68rem;
+  padding: 4px 8px;
+  line-height: 1.32;
+  white-space: normal;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.ch01-sheet .sheet-page-footer {
+  margin-top: auto;
+  padding-top: 4px;
+  padding-bottom: 2px;
+}
+
 /* Highlights Day Cards */
 .day-card {
   background-color: #FFFFFF;
@@ -1168,6 +1410,11 @@ body {
   font-weight: 800;
   color: #38BDF8;
   margin-bottom: 6px;
+}
+
+.conclusion-box p {
+  white-space: pre-line;
+  line-height: 1.6;
 }
 
 /* Guide & Archive Page (Chapter 06 Style Matching Sample PDF 100%) */
@@ -1410,7 +1657,8 @@ body {
   .workspace-splitter,
   .modal-backdrop,
   .view-mode-toggle,
-  .save-pill {
+  .save-pill,
+  .preview-nav-bar {
     display: none !important;
   }
 
@@ -1486,6 +1734,15 @@ body {
     letter-spacing: 2px !important;
     break-inside: avoid !important;
     page-break-inside: avoid !important;
+  }
+
+  .ch01-sheet .sheet-page-footer {
+    padding-top: 2mm !important;
+    padding-bottom: 1mm !important;
+  }
+
+  .ch01-sketch-img {
+    height: 94px !important;
   }
 
   .pick-card,
