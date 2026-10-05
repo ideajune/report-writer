@@ -29,11 +29,9 @@ export default function Home() {
     const activeDocId = localStorage.getItem(ACTIVE_DOC_KEY);
     const saved = localStorage.getItem(STORAGE_KEY);
     const savedWidth = localStorage.getItem("exhi_split_editor_width");
-    const savedPhotosPref = localStorage.getItem("exhi_include_photos_pref");
-
-    if (savedPhotosPref !== null) {
-      setIncludePhotos(savedPhotosPref === "true");
-    }
+    // 기본값은 항상 사진 + 소제목 동시 표시 (includePhotos = true)
+    // 사용자가 상단 토글 버튼을 명시적으로 클릭할 때만 숨김/제외 모드로 전환
+    setIncludePhotos(true);
 
     if (savedWidth) {
       const parsedWidth = parseInt(savedWidth, 10);
