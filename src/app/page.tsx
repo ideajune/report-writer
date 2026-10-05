@@ -5,6 +5,7 @@ import { ExhibitionReportDoc } from "@/types/report";
 import { defaultReport, emptyReport } from "@/data/sampleReport";
 import { quantumExpoReport } from "@/data/quantumReport";
 import { aiFestaReport } from "@/data/aiFestaReport";
+import { hansangReport } from "@/data/hansangReport";
 import { Header } from "@/components/Header";
 import { Editor } from "@/components/Editor";
 import { ReportPreview } from "@/components/ReportPreview";
@@ -14,7 +15,7 @@ const STORAGE_KEY = "exhi_current_report_draft_v8";
 const ACTIVE_DOC_KEY = "exhi_active_doc_id_v8";
 
 export default function Home() {
-  const [report, setReport] = useState<ExhibitionReportDoc>(quantumExpoReport);
+  const [report, setReport] = useState<ExhibitionReportDoc>(hansangReport);
   const [viewMode, setViewMode] = useState<"split" | "editor" | "preview">("split");
   const [lastSaved, setLastSaved] = useState<string>("");
   const [mounted, setMounted] = useState<boolean>(false);
@@ -43,8 +44,11 @@ export default function Home() {
     if (activeDocId && saved) {
       try {
         let parsed = JSON.parse(saved);
-        if (parsed.id === quantumExpoReport.id) {
-          // Always ensure the latest 20 companies and 7 trends (15 pages)
+        if (parsed.id === hansangReport.id) {
+          parsed = hansangReport;
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(hansangReport));
+          localStorage.setItem(`exhi_doc_${hansangReport.id}`, JSON.stringify(hansangReport));
+        } else if (parsed.id === quantumExpoReport.id) {
           parsed = quantumExpoReport;
           localStorage.setItem(STORAGE_KEY, JSON.stringify(quantumExpoReport));
           localStorage.setItem(`exhi_doc_${quantumExpoReport.id}`, JSON.stringify(quantumExpoReport));
@@ -56,10 +60,10 @@ export default function Home() {
         console.error("Failed to load saved report draft", e);
       }
     }
-    // Default to Quantum Expo Korea 2026 (15P) report on initial load
-    setReport(quantumExpoReport);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(quantumExpoReport));
-    localStorage.setItem(ACTIVE_DOC_KEY, quantumExpoReport.id);
+    // Default to Hansang Report on initial load
+    setReport(hansangReport);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(hansangReport));
+    localStorage.setItem(ACTIVE_DOC_KEY, hansangReport.id);
     setLastSaved("방금");
   }, []);
 

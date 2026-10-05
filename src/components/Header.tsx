@@ -5,6 +5,7 @@ import { ExhibitionReportDoc } from "@/types/report";
 import { defaultReport } from "@/data/sampleReport";
 import { quantumExpoReport } from "@/data/quantumReport";
 import { aiFestaReport } from "@/data/aiFestaReport";
+import { hansangReport } from "@/data/hansangReport";
 import { ArchiveItemMeta } from "./ArchiveModal";
 
 interface HeaderProps {
@@ -61,8 +62,17 @@ export const Header: React.FC<HeaderProps> = ({
       const savedIndex = localStorage.getItem("exhi_reports_archive_index_v1");
       let list: ArchiveItemMeta[] = savedIndex ? JSON.parse(savedIndex) : [];
 
-      if (!list.some((item) => item.id === aiFestaReport.id)) {
+      if (!list.some((item) => item.id === hansangReport.id)) {
         list.unshift({
+          id: hansangReport.id,
+          title: "제24차 세계한상대회",
+          eventName: hansangReport.ch01.eventName,
+          dates: hansangReport.cover.dateRange,
+          savedAt: hansangReport.updatedAt || "2026-10",
+        });
+      }
+      if (!list.some((item) => item.id === aiFestaReport.id)) {
+        list.push({
           id: aiFestaReport.id,
           title: "인공지능 페스타 2026",
           eventName: aiFestaReport.ch01.eventName,
@@ -91,6 +101,13 @@ export const Header: React.FC<HeaderProps> = ({
       setExhibitions(list);
     } catch {
       setExhibitions([
+        {
+          id: hansangReport.id,
+          title: "제24차 세계한상대회",
+          eventName: hansangReport.ch01.eventName,
+          dates: hansangReport.cover.dateRange,
+          savedAt: "2026-10",
+        },
         {
           id: aiFestaReport.id,
           title: "인공지능 페스타 2026",
@@ -125,6 +142,10 @@ export const Header: React.FC<HeaderProps> = ({
 
   const handleSelect = (item: ArchiveItemMeta) => {
     setIsDropdownOpen(false);
+    if (item.id === hansangReport.id) {
+      onSelectReport(hansangReport);
+      return;
+    }
     if (item.id === aiFestaReport.id) {
       onSelectReport(aiFestaReport);
       return;
@@ -155,7 +176,9 @@ export const Header: React.FC<HeaderProps> = ({
   };
 
   const currentTitle =
-    currentReportId === quantumExpoReport.id
+    currentReportId === hansangReport.id
+      ? "제24차 세계한상대회"
+      : currentReportId === quantumExpoReport.id
       ? "국제양자산업대전 (15P)"
       : currentReportId === aiFestaReport.id
       ? "AI FESTA"
@@ -178,6 +201,14 @@ export const Header: React.FC<HeaderProps> = ({
 
       {/* Quick Exhibition Switcher Tabs */}
       <div className="quick-exhibition-tabs">
+        <button
+          type="button"
+          className={`quick-tab-btn ${currentReportId === hansangReport.id ? "active" : ""}`}
+          onClick={() => onSelectReport(hansangReport)}
+          title="제24차 세계한상대회 (71개국 3,000명 한상 & 4,056억 수출 상담)"
+        >
+          🌐 세계한상대회
+        </button>
         <button
           type="button"
           className={`quick-tab-btn ${currentReportId === quantumExpoReport.id ? "active" : ""}`}
@@ -297,10 +328,11 @@ export const Header: React.FC<HeaderProps> = ({
               <div className="dropdown-list">
                 {exhibitions.map((item) => {
                   const isActive = item.id === currentReportId;
+                  const isHansang = item.id === hansangReport.id;
                   const isFesta = item.id === aiFestaReport.id;
                   const isQuantum = item.id === quantumExpoReport.id;
                   const isAi = item.id === defaultReport.id;
-                  const icon = isFesta ? "🎪" : isQuantum ? "⚛️" : isAi ? "🤖" : "📋";
+                  const icon = isHansang ? "🌐" : isFesta ? "🎪" : isQuantum ? "⚛️" : isAi ? "🤖" : "📋";
 
                   return (
                     <button

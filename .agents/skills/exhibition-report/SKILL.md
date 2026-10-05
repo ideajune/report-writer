@@ -57,4 +57,5 @@ description: >-
 
 - 문장은 명확하고 간결한 **개조식(~함, ~임, ~추진 권고)** 또는 격식 있는 공문서 어투로 작성합니다.
 - 단순 사실 나열을 피하고, 항상 **'그래서 우리 회사에 어떤 득이 되는가'**의 관점을 담습니다.
-- 생성된 데이터는 `report-writer-sample/src/types/report.ts`의 `ExhibitionReportDoc` 인터페이스 규격에 맞춰 JSON 파일로 연계하여 즉시 웹 뷰어 및 A4/PDF로 출력할 수 있습니다.
+- 생성된 데이터는 `report-writer-sample/src/types/report.ts`의 `ExhibitionReportDoc` 인터페이스 규격에 맞춰 웹 앱(`src/data/`) 및 JSON 파일로 연계하여 즉시 웹 뷰어 및 A4/PDF로 출력할 수 있도록 합니다.
+- **산출물 기본 생성 원칙 (Default Scope)**: 기본 산출물은 웹 앱 데이터 연동 및 실시간 웹 미리보기, A4/PDF 인쇄 지원, JSON 데이터 저장까지입니다. **Word(.docx) 문서 생성 및 메일 첨부용 모음 폴더 패키징은 기본 생성에서 제외**하며, 사용자가 명시적으로 별도 요청할 때만 생성합니다.

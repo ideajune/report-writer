@@ -5,6 +5,7 @@ import { ExhibitionReportDoc } from "@/types/report";
 import { defaultReport } from "@/data/sampleReport";
 import { quantumExpoReport } from "@/data/quantumReport";
 import { aiFestaReport } from "@/data/aiFestaReport";
+import { hansangReport } from "@/data/hansangReport";
 
 interface ArchiveModalProps {
   isOpen: boolean;
@@ -42,6 +43,7 @@ export const ArchiveModal: React.FC<ArchiveModalProps> = ({
   const loadArchiveList = () => {
     try {
       // Always sync preset reports with latest data definitions
+      localStorage.setItem(`exhi_doc_${hansangReport.id}`, JSON.stringify(hansangReport));
       localStorage.setItem(`exhi_doc_${aiFestaReport.id}`, JSON.stringify(aiFestaReport));
       localStorage.setItem(`exhi_doc_${quantumExpoReport.id}`, JSON.stringify(quantumExpoReport));
       localStorage.setItem(`exhi_doc_${defaultReport.id}`, JSON.stringify(defaultReport));
@@ -49,9 +51,20 @@ export const ArchiveModal: React.FC<ArchiveModalProps> = ({
       const savedIndex = localStorage.getItem(ARCHIVE_INDEX_KEY);
       let list: ArchiveItemMeta[] = savedIndex ? JSON.parse(savedIndex) : [];
 
+      // Ensure Hansang Report is registered
+      if (!list.some((item) => item.id === hansangReport.id)) {
+        list.unshift({
+          id: hansangReport.id,
+          title: hansangReport.cover.title,
+          eventName: hansangReport.ch01.eventName,
+          dates: hansangReport.cover.dateRange,
+          savedAt: hansangReport.updatedAt || "2026-10-01",
+        });
+      }
+
       // Ensure AI Festa is registered
       if (!list.some((item) => item.id === aiFestaReport.id)) {
-        list.unshift({
+        list.push({
           id: aiFestaReport.id,
           title: aiFestaReport.cover.title,
           eventName: aiFestaReport.ch01.eventName,
