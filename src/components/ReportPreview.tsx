@@ -1,13 +1,20 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { ExhibitionReportDoc } from "@/types/report";
 
 interface ReportPreviewProps {
   report: ExhibitionReportDoc;
+  includePhotos?: boolean;
+  onToggleIncludePhotos?: (val: boolean) => void;
 }
 
-export const ReportPreview: React.FC<ReportPreviewProps> = ({ report }) => {
+export const ReportPreview: React.FC<ReportPreviewProps> = ({
+  report,
+  includePhotos = true,
+  onToggleIncludePhotos,
+}) => {
+  const [isNavCollapsed, setIsNavCollapsed] = useState(false);
   const { cover, ch01, ch02, ch03, ch04, ch05, ch06 } = report;
 
   // Paginate Ch04: 5 companies per page
@@ -38,7 +45,9 @@ export const ReportPreview: React.FC<ReportPreviewProps> = ({ report }) => {
     ch05Pages.push(ch05.trends);
   }
 
-  const ch04StartPage = 7;
+  // Dynamic Page Calculations: If includePhotos is false, Ch02 Sketches (Page 5) is omitted!
+  const ch03PageNum = includePhotos ? 6 : 5;
+  const ch04StartPage = ch03PageNum + 1;
   const ch05StartPage = ch04StartPage + ch04Pages.length;
   const ch06PageNum = ch05StartPage + ch05Pages.length;
   const totalPages = ch06PageNum;
@@ -49,8 +58,10 @@ export const ReportPreview: React.FC<ReportPreviewProps> = ({ report }) => {
     { page: 2, label: "목차", id: "print-toc" },
     { page: 3, label: "01 개요", id: "print-ch01" },
     { page: 4, label: "02 일정", id: "print-ch02" },
-    { page: 5, label: "02 스케치", id: "print-ch02-sketches" },
-    { page: 6, label: "03 지형도", id: "print-ch03" },
+    ...(includePhotos
+      ? [{ page: 5, label: "02 스케치", id: "print-ch02-sketches" }]
+      : []),
+    { page: ch03PageNum, label: "03 지형도", id: "print-ch03" },
     ...ch04Pages.map((_, idx) => ({
       page: ch04StartPage + idx,
       label: `04 Pick (${idx + 1}P)`,
@@ -74,13 +85,52 @@ export const ReportPreview: React.FC<ReportPreviewProps> = ({ report }) => {
   return (
     <main className="preview-pane">
       {/* Sticky Page Navigation Toolbar (화면 상단 고정 네비게이션) */}
-      <div className="preview-nav-bar">
+      <div className={`preview-nav-bar ${isNavCollapsed ? "is-collapsed" : ""}`}>
         <div className="preview-nav-summary">
           <div className="preview-nav-title-group">
             <span className="preview-total-badge">📄 총 {totalPages}페이지 구성</span>
+            <span className={`preview-mode-badge ${!includePhotos ? "is-text-only" : ""}`}>
+              {includePhotos ? "📸 사진 포함" : "📝 텍스트 전용 (사진 제외)"}
+            </span>
             <span className="preview-report-title">{cover.title || "보고서 미리보기"}</span>
           </div>
-          <span className="preview-nav-tip">💡 버튼을 클릭하면 해당 페이지로 즉시 스크롤 이동합니다</span>
+          <div className="preview-nav-controls">
+            {onToggleIncludePhotos && (
+              <button
+                type="button"
+                className={`nav-photo-toggle-btn ${!includePhotos ? "active-no-photo" : ""}`}
+                onClick={() => onToggleIncludePhotos(!includePhotos)}
+                title={includePhotos ? "사진 및 사진 소제목 제외 모드로 전환" : "사진 포함 모드로 전환"}
+              >
+                {includePhotos ? "📸 사진 제외하기" : "📷 사진 포함하기"}
+              </button>
+            )}
+            {!isNavCollapsed && (
+              <span className="preview-nav-tip">💡 버튼을 클릭하면 해당 페이지로 즉시 스크롤 이동합니다</span>
+            )}
+            <button
+              type="button"
+              className={`nav-collapse-btn ${isNavCollapsed ? "is-collapsed" : ""}`}
+              onClick={() => setIsNavCollapsed((prev) => !prev)}
+              aria-label={isNavCollapsed ? "페이지 바로가기 메뉴 펼치기" : "페이지 바로가기 메뉴 접기"}
+              title={isNavCollapsed ? "페이지 바로가기 메뉴 펼치기" : "페이지 바로가기 메뉴 접기"}
+            >
+              <svg
+                className={`collapse-icon ${isNavCollapsed ? "collapsed" : ""}`}
+                width="11"
+                height="11"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <polyline points="18 15 12 9 6 15" />
+              </svg>
+              <span>{isNavCollapsed ? "펼치기" : "접기"}</span>
+            </button>
+          </div>
         </div>
         <div className="preview-nav-pills">
           {pageNavList.map((item) => (
@@ -161,7 +211,9 @@ export const ReportPreview: React.FC<ReportPreviewProps> = ({ report }) => {
             <div className="toc-card-content">
               <h3 className="toc-card-title">박람회 개요</h3>
               <p className="toc-card-desc">
-                행사 기본 정보 · 전년 대비 규모 정량 지표 · 유사 행사 구분 유의점 · 현장 스케치 사진
+                {`행사 기본 정보 · 전년 대비 규모 정량 지표 · 유사 행사 구분 유의점${
+                  includePhotos ? " · 현장 스케치 사진" : ""
+                }`}
               </p>
             </div>
           </div>
@@ -211,7 +263,9 @@ export const ReportPreview: React.FC<ReportPreviewProps> = ({ report }) => {
             <div className="toc-card-content">
               <h3 className="toc-card-title">이 자료 안내</h3>
               <p className="toc-card-desc">
-                현장 카탈로그 디지털 아카이빙 및 부록 안내 · 마무리 현장 스케치 사진 · 운영사 및 문의처
+                {`현장 카탈로그 디지털 아카이빙 및 부록 안내${
+                  includePhotos ? " · 마무리 현장 스케치 사진" : ""
+                } · 운영사 및 문의처`}
               </p>
             </div>
           </div>
@@ -225,7 +279,7 @@ export const ReportPreview: React.FC<ReportPreviewProps> = ({ report }) => {
       {/* ========================================================
           SHEET 3: 01 OVERVIEW (01 박람회 개요)
           ======================================================== */}
-      <article className="a4-sheet ch01-sheet" id="print-ch01">
+      <article className={`a4-sheet ch01-sheet ${!includePhotos ? "no-photos" : ""}`} id="print-ch01">
         {/* 01 CHAPTER HEADER */}
         <header className="chapter-header">
           <span className="chapter-number">01</span>
@@ -284,8 +338,8 @@ export const ReportPreview: React.FC<ReportPreviewProps> = ({ report }) => {
           </div>
         )}
 
-        {/* SKETCHES (4-Grid) */}
-        {ch01.sketches.length > 0 && (
+        {/* SKETCHES (4-Grid) - Only rendered in photo mode */}
+        {includePhotos && ch01.sketches.length > 0 && (
           <div className="ch01-sketches-wrap">
             <h3 className="ch01-sketches-title">
               📸 현장 스케치
@@ -356,57 +410,60 @@ export const ReportPreview: React.FC<ReportPreviewProps> = ({ report }) => {
 
       {/* ========================================================
           SHEET 5: 02 HIGHLIGHTS - SKETCHES (현장 스케치 사진 단독 페이지)
+          Only rendered when includePhotos is true!
           ======================================================== */}
-      <article className="a4-sheet" id="print-ch02-sketches">
-        <header className="chapter-header">
-          <span className="chapter-number">02</span>
-          <h2 className="chapter-title">현장 하이라이트 — 현장 스케치</h2>
-        </header>
+      {includePhotos && (
+        <article className="a4-sheet" id="print-ch02-sketches">
+          <header className="chapter-header">
+            <span className="chapter-number">02</span>
+            <h2 className="chapter-title">현장 하이라이트 — 현장 스케치</h2>
+          </header>
 
-        <p className="section-intro-text">
-          주요 세션 키노트, 전시관 전경 및 기술 데모·체험존 현장 스케치 사진입니다.
-        </p>
+          <p className="section-intro-text">
+            주요 세션 키노트, 전시관 전경 및 기술 데모·체험존 현장 스케치 사진입니다.
+          </p>
 
-        {ch02.sketches.length > 0 && (
-          <div style={{ marginTop: "14px" }}>
-            <div className="sketch-grid-4" style={{ gap: "16px" }}>
-              {ch02.sketches.map((sk) => (
-                <div key={sk.id} className="sketch-card" style={{ display: "flex", flexDirection: "column" }}>
-                  {sk.photoUrl ? (
-                    <img
-                      src={sk.photoUrl}
-                      alt={sk.caption}
-                      className="sketch-img"
-                      style={{ height: "195px", objectFit: "cover" }}
-                    />
-                  ) : (
-                    <div
-                      className="sketch-img"
-                      style={{
-                        height: "195px",
-                        background: "#E2E8F0",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        color: "#94A3B8",
-                      }}
-                    >
-                      사진 미등록
+          {ch02.sketches.length > 0 && (
+            <div style={{ marginTop: "14px" }}>
+              <div className="sketch-grid-4" style={{ gap: "16px" }}>
+                {ch02.sketches.map((sk) => (
+                  <div key={sk.id} className="sketch-card" style={{ display: "flex", flexDirection: "column" }}>
+                    {sk.photoUrl ? (
+                      <img
+                        src={sk.photoUrl}
+                        alt={sk.caption}
+                        className="sketch-img"
+                        style={{ height: "195px", objectFit: "cover" }}
+                      />
+                    ) : (
+                      <div
+                        className="sketch-img"
+                        style={{
+                          height: "195px",
+                          background: "#E2E8F0",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          color: "#94A3B8",
+                        }}
+                      >
+                        사진 미등록
+                      </div>
+                    )}
+                    <div className="sketch-caption" style={{ padding: "8px 12px", fontSize: "0.78rem" }}>
+                      {sk.caption}
                     </div>
-                  )}
-                  <div className="sketch-caption" style={{ padding: "8px 12px", fontSize: "0.78rem" }}>
-                    {sk.caption}
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
-        )}
+          )}
 
-        <footer className="sheet-page-footer">
-          <span>- 5 -</span>
-        </footer>
-      </article>
+          <footer className="sheet-page-footer">
+            <span>- 5 -</span>
+          </footer>
+        </article>
+      )}
 
       {/* ========================================================
           SHEET 4: 03 LANDSCAPE (참가기업 지형도)
@@ -443,7 +500,7 @@ export const ReportPreview: React.FC<ReportPreviewProps> = ({ report }) => {
         )}
 
         <footer className="sheet-page-footer">
-          <span>- 6 -</span>
+          <span>- {ch03PageNum} -</span>
         </footer>
       </article>
 
@@ -556,7 +613,7 @@ export const ReportPreview: React.FC<ReportPreviewProps> = ({ report }) => {
       {/* ========================================================
           SHEET: 06 GUIDE & ARCHIVE (이 자료 안내)
           ======================================================== */}
-      <article className="a4-sheet sample-ch06-sheet" id="print-ch06">
+      <article className={`a4-sheet sample-ch06-sheet ${!includePhotos ? "no-photos" : ""}`} id="print-ch06">
         <header className="chapter-header sample-ch06-header">
           <span className="chapter-number">06</span>
           <h2 className="chapter-title">이 자료 안내</h2>
@@ -566,7 +623,8 @@ export const ReportPreview: React.FC<ReportPreviewProps> = ({ report }) => {
           이 리포트 다음 페이지부터는 {(cover.title || "전시회").replace(/참관\s*(결과|정리)\s*(보고서|리포트)/g, "").replace(/\n/g, " ").trim()} 현장에서 저희가 직접 수집한 참가기업별 카탈로그 원본을 고해상도로 스캔한 자료가 이어집니다. 부스에서 받으셨던 그 자료들을 다시 넘겨보시듯 확인하실 수 있고, 텍스트 검색도 가능합니다.
         </p>
 
-        {ch06.sketches.length > 0 && (
+        {/* SKETCHES - Only rendered in photo mode */}
+        {includePhotos && ch06.sketches.length > 0 && (
           <div className="sample-ch06-sketches-area">
             <div className="sample-ch06-sketch-title">
               📷 현장 스케치

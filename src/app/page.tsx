@@ -21,6 +21,7 @@ export default function Home() {
   const [isArchiveOpen, setIsArchiveOpen] = useState<boolean>(false);
   const [editorWidth, setEditorWidth] = useState<number>(520);
   const [isDragging, setIsDragging] = useState<boolean>(false);
+  const [includePhotos, setIncludePhotos] = useState<boolean>(true);
 
   // Initialize from LocalStorage or default to Quantum Expo Korea 2026 (15P) report
   useEffect(() => {
@@ -28,6 +29,11 @@ export default function Home() {
     const activeDocId = localStorage.getItem(ACTIVE_DOC_KEY);
     const saved = localStorage.getItem(STORAGE_KEY);
     const savedWidth = localStorage.getItem("exhi_split_editor_width");
+    const savedPhotosPref = localStorage.getItem("exhi_include_photos_pref");
+
+    if (savedPhotosPref !== null) {
+      setIncludePhotos(savedPhotosPref === "true");
+    }
 
     if (savedWidth) {
       const parsedWidth = parseInt(savedWidth, 10);
@@ -171,6 +177,13 @@ export default function Home() {
     }
   };
 
+  const handleToggleIncludePhotos = (val: boolean) => {
+    setIncludePhotos(val);
+    if (typeof window !== "undefined") {
+      localStorage.setItem("exhi_include_photos_pref", val.toString());
+    }
+  };
+
   if (!mounted) {
     return null;
   }
@@ -189,6 +202,8 @@ export default function Home() {
         onExportJson={handleExportJson}
         onImportJson={handleImportJson}
         lastSaved={lastSaved}
+        includePhotos={includePhotos}
+        onToggleIncludePhotos={handleToggleIncludePhotos}
       />
 
       {/* Main Workspace Area with Draggable Resizer */}
@@ -197,7 +212,11 @@ export default function Home() {
           className="editor-container-wrap"
           style={viewMode === "split" ? { width: `${editorWidth}px` } : undefined}
         >
-          <Editor report={report} onChange={handleReportChange} />
+          <Editor
+            report={report}
+            onChange={handleReportChange}
+            includePhotos={includePhotos}
+          />
         </div>
 
         {viewMode === "split" && (
@@ -215,7 +234,11 @@ export default function Home() {
         )}
 
         <div className="preview-container-wrap">
-          <ReportPreview report={report} />
+          <ReportPreview
+            report={report}
+            includePhotos={includePhotos}
+            onToggleIncludePhotos={handleToggleIncludePhotos}
+          />
         </div>
       </div>
 

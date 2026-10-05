@@ -18,6 +18,8 @@ interface HeaderProps {
   onExportJson: () => void;
   onImportJson: (e: React.ChangeEvent<HTMLInputElement>) => void;
   lastSaved: string;
+  includePhotos?: boolean;
+  onToggleIncludePhotos?: (val: boolean) => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -31,6 +33,8 @@ export const Header: React.FC<HeaderProps> = ({
   onExportJson,
   onImportJson,
   lastSaved,
+  includePhotos = true,
+  onToggleIncludePhotos,
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -229,6 +233,28 @@ export const Header: React.FC<HeaderProps> = ({
           </button>
         </div>
 
+        {/* Photo Display Mode Toggle (방안 1: 사진 포함 / 사진 제외 텍스트 전용) */}
+        {onToggleIncludePhotos && (
+          <div className="photo-mode-toggle" role="group" aria-label="사진 표시 모드">
+            <button
+              type="button"
+              className={`photo-mode-btn ${includePhotos ? "active" : ""}`}
+              onClick={() => onToggleIncludePhotos(true)}
+              title="현장 스케치 사진 및 관련 소제목이 모두 포함된 일반 버전"
+            >
+              📸 사진 포함
+            </button>
+            <button
+              type="button"
+              className={`photo-mode-btn ${!includePhotos ? "active" : ""}`}
+              onClick={() => onToggleIncludePhotos(false)}
+              title="사진과 사진 바로 위 소제목을 제외한 텍스트 전용 버전 (A4 페이지 절약 / 텍스트 중심 인쇄)"
+            >
+              📝 사진 제외 (텍스트판)
+            </button>
+          </div>
+        )}
+
         {/* Action Buttons */}
         <button
           type="button"
@@ -357,9 +383,14 @@ export const Header: React.FC<HeaderProps> = ({
           type="button"
           className="btn-header primary"
           onClick={onPrint}
-          title="PDF 파일로 저장하거나 바로 인쇄"
+          title={
+            includePhotos
+              ? "사진이 포함된 보고서로 인쇄/PDF 저장"
+              : "사진 및 사진 소제목이 제외된 텍스트 전용 보고서로 인쇄/PDF 저장"
+          }
         >
-          🖨️ PDF 저장 / 인쇄
+          <span>🖨️ PDF 저장 / 인쇄</span>
+          {!includePhotos && <span className="btn-mini-tag">텍스트판</span>}
         </button>
       </div>
     </header>

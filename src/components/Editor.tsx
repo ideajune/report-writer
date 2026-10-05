@@ -13,9 +13,10 @@ import {
 interface EditorProps {
   report: ExhibitionReportDoc;
   onChange: (updated: ExhibitionReportDoc) => void;
+  includePhotos?: boolean;
 }
 
-export const Editor: React.FC<EditorProps> = ({ report, onChange }) => {
+export const Editor: React.FC<EditorProps> = ({ report, onChange, includePhotos = true }) => {
   const [activeTab, setActiveTab] = useState<
     "cover" | "ch01" | "ch02" | "ch03" | "ch04" | "ch05" | "ch06"
   >("cover");
