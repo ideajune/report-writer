@@ -55,22 +55,22 @@
       {
         "id": "hs1-1",
         "photoUrl": "/exhibitions/hansang/24th-img3.jpg",
-        "caption": "인천 송도컨벤시아 1~3홀 전시장 입구 및 전 세계 71개국 3,000여 한상 참관객 등록 전경"
+        "caption": "인천 송도컨벤시아 1층 등록데스크 및 전 세계 71개국 3,000여 한상 참관객 등록 전경"
       },
       {
         "id": "hs1-2",
-        "photoUrl": "/exhibitions/hansang/24th-banner2.jpg",
-        "caption": "제24차 세계한상대회 공식 비주얼 배너 및 글로벌 비즈니스 대축제 메인 로비"
+        "photoUrl": "/exhibitions/hansang/press_tomato_ribbon.jpg",
+        "caption": "제24차 세계한상대회 기업전시회 공식 개막 테이프 커팅식 및 VIP 전시장 순회"
       },
       {
         "id": "hs1-3",
-        "photoUrl": "/exhibitions/hansang/24th-img1.jpg",
-        "caption": "컨벤시아 전시장에 조성된 329개사 395개 기업전시회 부스 라인 및 현장 상담 인파"
+        "photoUrl": "/exhibitions/hansang/press_tomato_hall.jpg",
+        "caption": "송도컨벤시아 1~3홀에 조성된 329개사 395개 기업전시회 부스 라인 전체 조망"
       },
       {
         "id": "hs1-4",
-        "photoUrl": "/exhibitions/hansang/24th-img4.jpg",
-        "caption": "국내 참가기업 부스를 방문한 재외동포 바이어 대상 신제품 데모 시연 및 상담"
+        "photoUrl": "/exhibitions/hansang/24th-img1.jpg",
+        "caption": "컨벤시아 전시홀 내부 부스 라인을 가득 메운 국내외 바이어 및 참관 인파"
       }
     ]
   },
@@ -120,23 +120,23 @@
     "sketches": [
       {
         "id": "hs2-1",
-        "photoUrl": "/exhibitions/hansang/24th-img2.jpg",
-        "caption": "K-Food 및 프리미엄 소비재 부스 시식 및 현장 수출 상담"
+        "photoUrl": "/exhibitions/hansang/press_wooriilbo_ceremony.jpg",
+        "caption": "전시 4홀 특설무대에서 개최된 제24차 세계한상대회 공식 개회식 및 상징 퍼포먼스"
       },
       {
         "id": "hs2-2",
         "photoUrl": "/exhibitions/hansang/24th-banner3.jpg",
-        "caption": "영비즈니스리더스포럼 및 글로벌 AI 스타트업 VC 피칭 세션"
+        "caption": "Global AI Startup & VC 포럼: 12개 딥테크 스타트업의 글로벌 IR 피칭 경연 세션"
       },
       {
         "id": "hs2-3",
-        "photoUrl": "/exhibitions/hansang/24th-img4.jpg",
-        "caption": "혁신 기술 기업 부스 투어 및 1:1 바이어 비즈니스 매칭"
+        "photoUrl": "/exhibitions/hansang/24th-img2.jpg",
+        "caption": "K-Food 및 기능성 스낵 시식존에 몰린 해외 바이어들의 제품 테스팅 및 수출 상담"
       },
       {
         "id": "hs2-4",
-        "photoUrl": "/exhibitions/hansang/24th-img1.jpg",
-        "caption": "현장 즉시 수출 계약 940만 달러 및 32건 MOU 체결 성황"
+        "photoUrl": "/exhibitions/hansang/press_incheon_signing.jpg",
+        "caption": "현장 즉시 수출 계약(940만 달러) 및 32건(2,422만 달러) 수출 MOU 공식 체결식"
       }
     ]
   },
@@ -396,22 +396,22 @@
       {
         "id": "hs6-1",
         "photoUrl": "/exhibitions/hansang/real_closing_ceremony.png",
-        "caption": "인천 송도컨벤시아 프리미어볼룸에서 성황리에 진행된 제24차 세계한상대회 공식 폐회식"
+        "caption": "송도컨벤시아 프리미어볼룸에서 성황리에 거행된 제24차 세계한상대회 폐회식"
       },
       {
         "id": "hs6-2",
-        "photoUrl": "/exhibitions/hansang/24th-banner2.jpg",
-        "caption": "대회기 이양식 및 2027년 차기 개최지 경상북도 경주시로 세계한상대회기 전달"
+        "photoUrl": "/exhibitions/hansang/press_incheon_opening.jpg",
+        "caption": "차기 2027년 개최지(경북 경주)로의 대회기 이양 및 재외동포 대표단 기념촬영"
       },
       {
         "id": "hs6-3",
-        "photoUrl": "/exhibitions/hansang/24th-img3.jpg",
-        "caption": "전 세계 71개국 글로벌 한상 경제인 대표단 및 국내 기업인 폐막 합동 기념촬영"
+        "photoUrl": "/exhibitions/hansang/press_incheonilbo_booth.jpg",
+        "caption": "기업전시회 현장을 둘러보며 참가기업의 신기술을 격려하는 내외빈 부스 투어"
       },
       {
         "id": "hs6-4",
-        "photoUrl": "/exhibitions/hansang/24th-img1.jpg",
-        "caption": "현장 수집된 329개사 수출 카탈로그 디지털 아카이빙 및 비즈니스 데이터베이스 구축"
+        "photoUrl": "/exhibitions/hansang/24th-img4.jpg",
+        "caption": "현장에서 수집된 329개사 수출 카탈로그 디지털 아카이빙 및 바이어 데이터베이스 구축"
       }
     ],
     "serviceTitle": "글로벌 비즈니스 참관 리포트 및 카탈로그 디지털 아카이빙",
