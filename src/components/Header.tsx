@@ -1,14 +1,24 @@
 "use client";
 
 import React, { useRef, useState, useEffect } from "react";
-import { ExhibitionReportDoc } from "@/types/report";
+import { ExhibitionReportDoc, ReportRevisionMeta } from "@/types/report";
 import { defaultReport } from "@/data/sampleReport";
 import { quantumExpoReport } from "@/data/quantumReport";
 import { aiFestaReport } from "@/data/aiFestaReport";
 import { hansangReport } from "@/data/hansangReport";
+import { slwReport } from "@/data/slwReport";
 import { ArchiveItemMeta } from "./ArchiveModal";
+import { NewRevisionModal } from "./NewRevisionModal";
+import {
+  getRevisions,
+  getRevisionSnapshot,
+  deleteRevision,
+  setActiveRevisionId,
+  getActiveRevisionId,
+} from "@/utils/revisionStorage";
 
 interface HeaderProps {
+  report: ExhibitionReportDoc;
   viewMode: "split" | "editor" | "preview";
   setViewMode: (mode: "split" | "editor" | "preview") => void;
   onPrint: () => void;
@@ -24,6 +34,7 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({
+  report,
   viewMode,
   setViewMode,
   onPrint,
@@ -39,31 +50,94 @@ export const Header: React.FC<HeaderProps> = ({
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const revDropdownRef = useRef<HTMLDivElement>(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isRevDropdownOpen, setIsRevDropdownOpen] = useState(false);
+  const [isNewRevModalOpen, setIsNewRevModalOpen] = useState(false);
   const [exhibitions, setExhibitions] = useState<ArchiveItemMeta[]>([]);
+  const [revisions, setRevisions] = useState<ReportRevisionMeta[]>([]);
 
-  // Close dropdown when clicking outside
+  // Close dropdowns when clicking outside
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
         setIsDropdownOpen(false);
       }
+      if (revDropdownRef.current && !revDropdownRef.current.contains(e.target as Node)) {
+        setIsRevDropdownOpen(false);
+      }
     };
-    if (isDropdownOpen) {
+    if (isDropdownOpen || isRevDropdownOpen) {
       document.addEventListener("mousedown", handleClickOutside);
     }
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [isDropdownOpen]);
+  }, [isDropdownOpen, isRevDropdownOpen]);
+
+  // Load revisions when report changes
+  useEffect(() => {
+    if (report && report.id) {
+      const list = getRevisions(report.id, report);
+      setRevisions(list);
+    }
+  }, [report, report?.id]);
+  // Revision Handlers
+  const handleSelectRevision = (rev: ReportRevisionMeta) => {
+    setIsRevDropdownOpen(false);
+    const snapDoc = getRevisionSnapshot(report.id, rev.revisionId);
+    if (snapDoc) {
+      setActiveRevisionId(report.id, rev.revisionId);
+      onSelectReport(snapDoc);
+    } else {
+      alert("해당 차수의 스냅샷 데이터를 찾을 수 없습니다.");
+    }
+  };
+
+  const handleDeleteRevision = (e: React.MouseEvent, rev: ReportRevisionMeta) => {
+    e.stopPropagation();
+    if (window.confirm(`[${rev.versionLabel}] 차수를 삭제하시겠습니까?`)) {
+      const updatedList = deleteRevision(report.id, rev.revisionId);
+      setRevisions(updatedList);
+    }
+  };
+
+  const handleToggleCoverOption = (show: boolean) => {
+    const currentRev = report.cover.revisionInfo || {
+      versionNumber: 1,
+      versionLabel: "1차",
+      memoKeyword: "",
+      showOnCover: false,
+    };
+    const updatedDoc: ExhibitionReportDoc = {
+      ...report,
+      cover: {
+        ...report.cover,
+        revisionInfo: {
+          ...currentRev,
+          showOnCover: show,
+        },
+      },
+    };
+    onSelectReport(updatedDoc);
+  };
 
   const loadExhibitions = () => {
     try {
       const savedIndex = localStorage.getItem("exhi_reports_archive_index_v1");
       let list: ArchiveItemMeta[] = savedIndex ? JSON.parse(savedIndex) : [];
 
-      if (!list.some((item) => item.id === hansangReport.id)) {
+      if (!list.some((item) => item.id === slwReport.id)) {
         list.unshift({
+          id: slwReport.id,
+          title: "스마트라이프위크 2026",
+          eventName: slwReport.ch01.eventName,
+          dates: slwReport.cover.dateRange,
+          savedAt: slwReport.updatedAt || "2026-10",
+        });
+      }
+      if (!list.some((item) => item.id === hansangReport.id)) {
+        list.push({
           id: hansangReport.id,
           title: "제24차 세계한상대회",
           eventName: hansangReport.ch01.eventName,
@@ -101,6 +175,13 @@ export const Header: React.FC<HeaderProps> = ({
       setExhibitions(list);
     } catch {
       setExhibitions([
+        {
+          id: slwReport.id,
+          title: "스마트라이프위크 2026",
+          eventName: slwReport.ch01.eventName,
+          dates: slwReport.cover.dateRange,
+          savedAt: "2026-10",
+        },
         {
           id: hansangReport.id,
           title: "제24차 세계한상대회",
@@ -142,6 +223,10 @@ export const Header: React.FC<HeaderProps> = ({
 
   const handleSelect = (item: ArchiveItemMeta) => {
     setIsDropdownOpen(false);
+    if (item.id === slwReport.id) {
+      onSelectReport(slwReport);
+      return;
+    }
     if (item.id === hansangReport.id) {
       onSelectReport(hansangReport);
       return;
@@ -176,7 +261,9 @@ export const Header: React.FC<HeaderProps> = ({
   };
 
   const currentTitle =
-    currentReportId === hansangReport.id
+    currentReportId === slwReport.id
+      ? "스마트라이프위크 2026"
+      : currentReportId === hansangReport.id
       ? "제24차 세계한상대회"
       : currentReportId === quantumExpoReport.id
       ? "국제양자산업대전 (15P)"
@@ -185,6 +272,19 @@ export const Header: React.FC<HeaderProps> = ({
       : currentReportId === defaultReport.id
       ? "AI Summit"
       : "전시회 선택";
+
+  const currentIcon =
+    currentReportId === slwReport.id
+      ? "🏙️"
+      : currentReportId === hansangReport.id
+      ? "🌐"
+      : currentReportId === quantumExpoReport.id
+      ? "⚛️"
+      : currentReportId === aiFestaReport.id
+      ? "🎪"
+      : currentReportId === defaultReport.id
+      ? "🤖"
+      : "🏛️";
 
   return (
     <header className="app-header">
@@ -199,40 +299,178 @@ export const Header: React.FC<HeaderProps> = ({
         )}
       </div>
 
-      {/* Quick Exhibition Switcher Tabs */}
-      <div className="quick-exhibition-tabs">
+      {/* 통합 전시회 선택 드롭다운 (탭 + 우측 드롭다운 2개 버튼 통합) */}
+      <div className="unified-exhibition-container" ref={dropdownRef}>
         <button
           type="button"
-          className={`quick-tab-btn ${currentReportId === hansangReport.id ? "active" : ""}`}
-          onClick={() => onSelectReport(hansangReport)}
-          title="제24차 세계한상대회 (71개국 3,000명 한상 & 4,056억 수출 상담)"
+          className={`unified-exhibition-btn ${isDropdownOpen ? "open" : ""}`}
+          onClick={handleToggleDropdown}
+          title="클릭하여 다른 전시회 보고서로 전환하거나 새 보고서를 작성합니다"
         >
-          🌐 세계한상대회
+          <span className="unified-ex-icon">{currentIcon}</span>
+          <span className="unified-ex-title">{currentTitle}</span>
+          <span className="unified-ex-arrow">{isDropdownOpen ? "▲" : "▼"}</span>
         </button>
+
+        {isDropdownOpen && (
+          <div className="exhibition-dropdown-menu" role="menu">
+            <div className="dropdown-header-title">
+              <span>전시회 보고서 목록 ({exhibitions.length})</span>
+              <span style={{ fontSize: "0.7rem", color: "#38BDF8" }}>클릭 시 즉시 전환</span>
+            </div>
+            <div className="dropdown-list">
+              {exhibitions.map((item) => {
+                const isActive = item.id === currentReportId;
+                const isHansang = item.id === hansangReport.id;
+                const isFesta = item.id === aiFestaReport.id;
+                const isQuantum = item.id === quantumExpoReport.id;
+                const isAi = item.id === defaultReport.id;
+                const icon = isHansang ? "🌐" : isFesta ? "🎪" : isQuantum ? "⚛️" : isAi ? "🤖" : "📋";
+
+                return (
+                  <button
+                    key={item.id}
+                    type="button"
+                    className={`dropdown-item ${isActive ? "active" : ""}`}
+                    onClick={() => handleSelect(item)}
+                  >
+                    <div className="dropdown-item-info">
+                      <div className="dropdown-item-title">
+                        <span style={{ marginRight: "6px" }}>{icon}</span>
+                        <span>{item.title}</span>
+                        {isActive && (
+                          <span className="dropdown-active-badge">현재 열람중</span>
+                        )}
+                      </div>
+                      <div className="dropdown-item-sub">
+                        {item.eventName ? `${item.eventName} · ` : ""}{item.dates}
+                      </div>
+                    </div>
+                    {isActive && <span style={{ color: "#38BDF8", fontWeight: 700 }}>✓</span>}
+                  </button>
+                );
+              })}
+            </div>
+
+            <div className="dropdown-divider"></div>
+
+            <button
+              type="button"
+              className="dropdown-footer-btn"
+              onClick={() => {
+                setIsDropdownOpen(false);
+                onNewReport();
+              }}
+            >
+              <span>✨ 새 전시회 보고서 작성</span>
+            </button>
+            <button
+              type="button"
+              className="dropdown-footer-btn"
+              onClick={() => {
+                setIsDropdownOpen(false);
+                onOpenArchive();
+              }}
+            >
+              <span>📂 보관함 전체 관리...</span>
+            </button>
+          </div>
+        )}
+      </div>
+
+      {/* Revision Management Controls */}
+      <div className="header-revision-group" ref={revDropdownRef}>
         <button
           type="button"
-          className={`quick-tab-btn ${currentReportId === quantumExpoReport.id ? "active" : ""}`}
-          onClick={() => onSelectReport(quantumExpoReport)}
-          title="국제양자산업대전 2026 (20개사 & 4페이지 트렌드, 총 15페이지)"
+          className={`btn-header revision-btn ${isRevDropdownOpen ? "open" : ""}`}
+          onClick={() => setIsRevDropdownOpen((prev) => !prev)}
+          title="현재 전시회의 차수(버전) 목록 및 관리"
         >
-          ⚛️ 국제양자산업대전 (15P)
+          <span className="rev-icon">🔖</span>
+          <span className="rev-label-text">
+            {report.cover.revisionInfo?.versionLabel || "1차"}
+            {report.cover.revisionInfo?.memoKeyword ? ` · ${report.cover.revisionInfo.memoKeyword}` : ""}
+          </span>
+          <span style={{ fontSize: "0.68rem", opacity: 0.85, marginLeft: "4px" }}>
+            {isRevDropdownOpen ? "▲" : "▼"}
+          </span>
         </button>
+
         <button
           type="button"
-          className={`quick-tab-btn ${currentReportId === aiFestaReport.id ? "active" : ""}`}
-          onClick={() => onSelectReport(aiFestaReport)}
-          title="인공지능 페스타 2026"
+          className="btn-header rev-new-btn"
+          onClick={() => setIsNewRevModalOpen(true)}
+          title="현재 편집 상태를 새로운 차수(스냅샷)로 저장합니다"
         >
-          🎪 AI FESTA
+          <span>💾 새 차수 저장</span>
         </button>
-        <button
-          type="button"
-          className={`quick-tab-btn ${currentReportId === defaultReport.id ? "active" : ""}`}
-          onClick={() => onSelectReport(defaultReport)}
-          title="AI Summit Seoul 2026"
-        >
-          🤖 AI Summit
-        </button>
+
+        {isRevDropdownOpen && (
+          <div className="revision-dropdown-menu" role="menu">
+            <div className="dropdown-header-title">
+              <span>보고서 차수 히스토리 ({revisions.length})</span>
+              <button
+                type="button"
+                className="rev-inline-add-btn"
+                onClick={() => {
+                  setIsRevDropdownOpen(false);
+                  setIsNewRevModalOpen(true);
+                }}
+              >
+                + 새 차수 저장
+              </button>
+            </div>
+
+            {/* 표지 출력 선택 토글 */}
+            <div className="rev-cover-toggle-box">
+              <label className="rev-toggle-label">
+                <input
+                  type="checkbox"
+                  checked={report.cover.revisionInfo?.showOnCover === true}
+                  onChange={(e) => handleToggleCoverOption(e.target.checked)}
+                />
+                <span>📄 표지에 차수/메모 인쇄 표시</span>
+              </label>
+            </div>
+
+            <div className="revision-list">
+              {revisions.map((rev) => {
+                const isActive =
+                  (report.cover.revisionInfo?.versionNumber === rev.versionNumber) ||
+                  (getActiveRevisionId(report.id) === rev.revisionId);
+
+                return (
+                  <div
+                    key={rev.revisionId}
+                    className={`revision-item ${isActive ? "active" : ""}`}
+                    onClick={() => handleSelectRevision(rev)}
+                  >
+                    <div className="rev-item-content">
+                      <div className="rev-item-header">
+                        <span className="rev-item-version">{rev.versionLabel}</span>
+                        <span className="rev-item-date">{rev.savedAt}</span>
+                        {isActive && <span className="rev-active-badge">현재 활성</span>}
+                      </div>
+                      <div className="rev-item-memo">
+                        {rev.memoKeyword || "(메모 없음)"}
+                      </div>
+                    </div>
+                    {revisions.length > 1 && (
+                      <button
+                        type="button"
+                        className="rev-item-del-btn"
+                        onClick={(e) => handleDeleteRevision(e, rev)}
+                        title="이 차수 삭제"
+                      >
+                        ✕
+                      </button>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="header-actions">
@@ -264,126 +502,9 @@ export const Header: React.FC<HeaderProps> = ({
           </button>
         </div>
 
-        {/* Photo Display Mode Toggle (방안 1: 사진 포함 / 사진 제외 텍스트 전용) */}
-        {onToggleIncludePhotos && (
-          <div className="photo-mode-toggle" role="group" aria-label="사진 표시 모드">
-            <button
-              type="button"
-              className={`photo-mode-btn ${includePhotos ? "active" : ""}`}
-              onClick={() => onToggleIncludePhotos(true)}
-              title="현장 스케치 사진 및 관련 소제목이 모두 포함된 일반 버전"
-            >
-              📸 사진 포함
-            </button>
-            <button
-              type="button"
-              className={`photo-mode-btn ${!includePhotos ? "active" : ""}`}
-              onClick={() => onToggleIncludePhotos(false)}
-              title="사진과 사진 바로 위 소제목을 제외한 텍스트 전용 버전 (A4 페이지 절약 / 텍스트 중심 인쇄)"
-            >
-              📝 사진 제외 (텍스트판)
-            </button>
-          </div>
-        )}
 
-        {/* Action Buttons */}
-        <button
-          type="button"
-          className="btn-header"
-          onClick={onOpenArchive}
-          title="작성했던 여러 전시회 보고서 목록 보기"
-        >
-          📂 보관함
-        </button>
 
-        <button
-          type="button"
-          className="btn-header"
-          onClick={onNewReport}
-          title="새 전시회 작성을 위한 빈 양식으로 시작"
-        >
-          ✨ 새 보고서
-        </button>
 
-        {/* 누적 전시회 선택 드롭다운 버튼 */}
-        <div className="exhibition-dropdown-container" ref={dropdownRef}>
-          <button
-            type="button"
-            className={`btn-header exhibition-dropdown-btn ${isDropdownOpen ? "open" : ""}`}
-            onClick={handleToggleDropdown}
-            title="누적된 전시회 목록에서 열람 및 편집할 보고서를 선택합니다"
-          >
-            <span>🏛️ {currentTitle}</span>
-            <span style={{ fontSize: "0.68rem", opacity: 0.85, marginLeft: "2px" }}>
-              {isDropdownOpen ? "▲" : "▼"}
-            </span>
-          </button>
-
-          {isDropdownOpen && (
-            <div className="exhibition-dropdown-menu" role="menu">
-              <div className="dropdown-header-title">
-                <span>누적 전시회 목록 ({exhibitions.length})</span>
-                <span style={{ fontSize: "0.7rem", color: "#38BDF8" }}>클릭 시 즉시 전환</span>
-              </div>
-              <div className="dropdown-list">
-                {exhibitions.map((item) => {
-                  const isActive = item.id === currentReportId;
-                  const isHansang = item.id === hansangReport.id;
-                  const isFesta = item.id === aiFestaReport.id;
-                  const isQuantum = item.id === quantumExpoReport.id;
-                  const isAi = item.id === defaultReport.id;
-                  const icon = isHansang ? "🌐" : isFesta ? "🎪" : isQuantum ? "⚛️" : isAi ? "🤖" : "📋";
-
-                  return (
-                    <button
-                      key={item.id}
-                      type="button"
-                      className={`dropdown-item ${isActive ? "active" : ""}`}
-                      onClick={() => handleSelect(item)}
-                    >
-                      <div className="dropdown-item-info">
-                        <div className="dropdown-item-title">
-                          <span style={{ marginRight: "6px" }}>{icon}</span>
-                          <span>{item.title}</span>
-                          {isActive && (
-                            <span className="dropdown-active-badge">현재</span>
-                          )}
-                        </div>
-                        <div className="dropdown-item-sub">
-                          {item.eventName ? `${item.eventName} · ` : ""}{item.dates}
-                        </div>
-                      </div>
-                      {isActive && <span style={{ color: "#38BDF8", fontWeight: 700 }}>✓</span>}
-                    </button>
-                  );
-                })}
-              </div>
-
-              <div className="dropdown-divider"></div>
-
-              <button
-                type="button"
-                className="dropdown-footer-btn"
-                onClick={() => {
-                  setIsDropdownOpen(false);
-                  onNewReport();
-                }}
-              >
-                <span>✨ 새 전시회 보고서 작성</span>
-              </button>
-              <button
-                type="button"
-                className="dropdown-footer-btn"
-                onClick={() => {
-                  setIsDropdownOpen(false);
-                  onOpenArchive();
-                }}
-              >
-                <span>📂 보관함 전체 관리...</span>
-              </button>
-            </div>
-          )}
-        </div>
 
         <button
           type="button"
@@ -425,6 +546,14 @@ export const Header: React.FC<HeaderProps> = ({
           {!includePhotos && <span className="btn-mini-tag">텍스트판</span>}
         </button>
       </div>
+
+      {/* New Revision Save Modal */}
+      <NewRevisionModal
+        isOpen={isNewRevModalOpen}
+        onClose={() => setIsNewRevModalOpen(false)}
+        report={report}
+        onSaved={onSelectReport}
+      />
     </header>
   );
 };

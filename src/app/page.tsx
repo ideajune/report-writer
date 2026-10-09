@@ -6,6 +6,7 @@ import { defaultReport, emptyReport } from "@/data/sampleReport";
 import { quantumExpoReport } from "@/data/quantumReport";
 import { aiFestaReport } from "@/data/aiFestaReport";
 import { hansangReport } from "@/data/hansangReport";
+import { slwReport } from "@/data/slwReport";
 import { Header } from "@/components/Header";
 import { Editor } from "@/components/Editor";
 import { ReportPreview } from "@/components/ReportPreview";
@@ -15,7 +16,7 @@ const STORAGE_KEY = "exhi_current_report_draft_v8";
 const ACTIVE_DOC_KEY = "exhi_active_doc_id_v8";
 
 export default function Home() {
-  const [report, setReport] = useState<ExhibitionReportDoc>(hansangReport);
+  const [report, setReport] = useState<ExhibitionReportDoc>(slwReport);
   const [viewMode, setViewMode] = useState<"split" | "editor" | "preview">("split");
   const [lastSaved, setLastSaved] = useState<string>("");
   const [mounted, setMounted] = useState<boolean>(false);
@@ -24,7 +25,7 @@ export default function Home() {
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [includePhotos, setIncludePhotos] = useState<boolean>(true);
 
-  // Initialize from LocalStorage or default to Quantum Expo Korea 2026 (15P) report
+  // Initialize from LocalStorage or default to Smart Life Week 2026 report
   useEffect(() => {
     setMounted(true);
     const activeDocId = localStorage.getItem(ACTIVE_DOC_KEY);
@@ -44,7 +45,11 @@ export default function Home() {
     if (activeDocId && saved) {
       try {
         let parsed = JSON.parse(saved);
-        if (parsed.id === hansangReport.id) {
+        if (parsed.id === slwReport.id) {
+          parsed = slwReport;
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(slwReport));
+          localStorage.setItem(`exhi_doc_${slwReport.id}`, JSON.stringify(slwReport));
+        } else if (parsed.id === hansangReport.id) {
           parsed = hansangReport;
           localStorage.setItem(STORAGE_KEY, JSON.stringify(hansangReport));
           localStorage.setItem(`exhi_doc_${hansangReport.id}`, JSON.stringify(hansangReport));
@@ -60,10 +65,11 @@ export default function Home() {
         console.error("Failed to load saved report draft", e);
       }
     }
-    // Default to Hansang Report on initial load
-    setReport(hansangReport);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(hansangReport));
-    localStorage.setItem(ACTIVE_DOC_KEY, hansangReport.id);
+    // Default to SLW Report on initial load
+    setReport(slwReport);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(slwReport));
+    localStorage.setItem(ACTIVE_DOC_KEY, slwReport.id);
+    localStorage.setItem(`exhi_doc_${slwReport.id}`, JSON.stringify(slwReport));
     setLastSaved("방금");
   }, []);
 
@@ -194,6 +200,7 @@ export default function Home() {
     <div className="app-container">
       {/* Top Header Controls */}
       <Header
+        report={report}
         viewMode={viewMode}
         setViewMode={setViewMode}
         onPrint={handlePrint}

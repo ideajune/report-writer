@@ -4,7 +4,7 @@ export const defaultReport: ExhibitionReportDoc = {
   id: "report-aise-2026",
   cover: {
     title: "AI Summit Seoul & EXPO 2026",
-    subtitle: "현장 프로그램북과 온라인 팩트체크를 바탕으로 정리한 비즈니스 결과 보고서",
+    subtitle: "현장에서 직접 수집한 전 부스 카탈로그와 현장 참관 기록을 바탕으로 정리했습니다.",
     dateRange: "2026.08.19(수) – 08.21(금)",
     location: "서울 코엑스 (COEX) Hall B",
     department: "신사업기획팀 / AI전략TF",
@@ -13,6 +13,12 @@ export const defaultReport: ExhibitionReportDoc = {
     issueDate: "2026.09",
     contactEmail: "contact@catalogexpress.kr",
     website: "catalogexpress.kr",
+    revisionInfo: {
+      versionNumber: 1,
+      versionLabel: "1차",
+      memoKeyword: "초기 팩트체크 및 10대 핵심 기업 Pick",
+      showOnCover: false,
+    },
   },
   ch01: {
     eventName: "AI Summit Seoul & EXPO 2026 (AISE 2026)",
@@ -152,7 +158,7 @@ export const defaultReport: ExhibitionReportDoc = {
     source: "출처: 현장 배포 공식 프로그램북 부스 배치도 및 디렉토리 직접 확인",
   },
   ch04: {
-    intro: "전체 참가기업 중 기술 혁신성, 투자 유치 규모, 당사 비즈니스 연계 가능성이 높은 핵심 기업 10곳을 선별하여 심층 분석하였습니다.",
+    intro: "전체 참가기업 중 기술 혁신성, 투자 유치 규모, 비즈니스 연계 가치가 높은 핵심 기업 10곳을 선별하여 심층 분석하였습니다.",
     companies: [
       {
         id: "pick-1",
@@ -378,7 +384,7 @@ export const emptyReport: ExhibitionReportDoc = {
     source: "",
   },
   ch04: {
-    intro: "당사 비즈니스 연계 가치가 높은 핵심 기업들을 선별하여 심층 분석하였습니다.",
+    intro: "비즈니스 연계 가치가 높은 핵심 기업들을 선별하여 심층 분석하였습니다.",
     companies: [
       {
         id: "pick-1",

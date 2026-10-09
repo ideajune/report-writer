@@ -8,6 +8,7 @@ import {
   TrendItem,
   LandscapeField,
   HighlightDay,
+  RevisionInfo,
 } from "@/types/report";
 
 interface EditorProps {
@@ -26,6 +27,26 @@ export const Editor: React.FC<EditorProps> = ({ report, onChange, includePhotos 
     onChange({
       ...report,
       cover: { ...report.cover, [field]: value },
+    });
+  };
+
+  // Revision Info Handler
+  const handleRevisionChange = (field: keyof RevisionInfo, value: any) => {
+    const currentRev = report.cover.revisionInfo || {
+      versionNumber: 1,
+      versionLabel: "1차",
+      memoKeyword: "",
+      showOnCover: false,
+    };
+    onChange({
+      ...report,
+      cover: {
+        ...report.cover,
+        revisionInfo: {
+          ...currentRev,
+          [field]: value,
+        },
+      },
     });
   };
 
@@ -194,6 +215,61 @@ export const Editor: React.FC<EditorProps> = ({ report, onChange, includePhotos 
                   onChange={(e) => handleCoverChange("contactEmail", e.target.value)}
                   placeholder="contact@catalogexpress.kr"
                 />
+              </div>
+            </div>
+
+            {/* 차수 관리 및 표지 출력 옵션 */}
+            <div style={{ marginTop: "24px", paddingTop: "20px", borderTop: "1px dashed var(--color-border)" }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px" }}>
+                <span style={{ fontSize: "0.95rem", fontWeight: 700, color: "var(--color-text-main)" }}>
+                  📌 보고서 차수 관리 및 표지 출력 설정
+                </span>
+                <label style={{ display: "flex", alignItems: "center", gap: "6px", cursor: "pointer", fontSize: "0.85rem", fontWeight: 600, color: "#0284c7" }}>
+                  <input
+                    type="checkbox"
+                    checked={report.cover.revisionInfo?.showOnCover === true}
+                    onChange={(e) => handleRevisionChange("showOnCover", e.target.checked)}
+                    style={{ cursor: "pointer", width: "16px", height: "16px" }}
+                  />
+                  표지에 차수 및 메모 출력
+                </label>
+              </div>
+
+              <div className="form-row-2">
+                <div className="form-group">
+                  <label>차수 명칭 (라벨)</label>
+                  <input
+                    type="text"
+                    className="form-input"
+                    value={report.cover.revisionInfo?.versionLabel || "1차"}
+                    onChange={(e) => handleRevisionChange("versionLabel", e.target.value)}
+                    placeholder="예: 1차, 2차 개정본, 최종본"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>차수 번호 (숫자)</label>
+                  <input
+                    type="number"
+                    className="form-input"
+                    value={report.cover.revisionInfo?.versionNumber || 1}
+                    onChange={(e) => handleRevisionChange("versionNumber", parseInt(e.target.value, 10) || 1)}
+                    min={1}
+                  />
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label>간단 키워드 메모 (표지 및 히스토리에 표시)</label>
+                <input
+                  type="text"
+                  className="form-input"
+                  value={report.cover.revisionInfo?.memoKeyword || ""}
+                  onChange={(e) => handleRevisionChange("memoKeyword", e.target.value)}
+                  placeholder="예: 20개사 기업 Pick & 산업동향 심층 보강본"
+                />
+                <span style={{ fontSize: "0.78rem", color: "var(--color-text-muted)", marginTop: "4px", display: "block" }}>
+                  * 상단 [표지에 차수 및 메모 출력] 체크를 해제하면 인쇄 및 웹 미리보기 표지에서 숨겨집니다.
+                </span>
               </div>
             </div>
           </div>
@@ -705,7 +781,7 @@ export const Editor: React.FC<EditorProps> = ({ report, onChange, includePhotos 
                 </div>
 
                 <div className="form-group">
-                  <label style={{ color: "#15803D" }}>★ 왜 주목할까 (핵심 가치 & 당사 시사점)</label>
+                  <label style={{ color: "#15803D" }}>★ 왜 주목할까 (핵심 가치 & 기업 시사점)</label>
                   <textarea
                     className="form-textarea"
                     value={comp.whyPick}

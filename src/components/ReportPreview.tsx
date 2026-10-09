@@ -14,7 +14,7 @@ export const ReportPreview: React.FC<ReportPreviewProps> = ({
   includePhotos = true,
   onToggleIncludePhotos,
 }) => {
-  const [isNavCollapsed, setIsNavCollapsed] = useState(false);
+  const [isNavCollapsed, setIsNavCollapsed] = useState(true);
   const { cover, ch01, ch02, ch03, ch04, ch05, ch06 } = report;
 
   // Paginate Ch04: 5 companies per page
@@ -112,8 +112,8 @@ export const ReportPreview: React.FC<ReportPreviewProps> = ({
               type="button"
               className={`nav-collapse-btn ${isNavCollapsed ? "is-collapsed" : ""}`}
               onClick={() => setIsNavCollapsed((prev) => !prev)}
-              aria-label={isNavCollapsed ? "페이지 바로가기 메뉴 펼치기" : "페이지 바로가기 메뉴 접기"}
-              title={isNavCollapsed ? "페이지 바로가기 메뉴 펼치기" : "페이지 바로가기 메뉴 접기"}
+              aria-label={isNavCollapsed ? "목차 네비게이션 펼치기" : "목차 네비게이션 접기"}
+              title={isNavCollapsed ? "목차 네비게이션 펼치기" : "목차 네비게이션 접기"}
             >
               <svg
                 className={`collapse-icon ${isNavCollapsed ? "collapsed" : ""}`}
@@ -128,7 +128,7 @@ export const ReportPreview: React.FC<ReportPreviewProps> = ({
               >
                 <polyline points="18 15 12 9 6 15" />
               </svg>
-              <span>{isNavCollapsed ? "펼치기" : "접기"}</span>
+              <span>{isNavCollapsed ? "목차 펼치기" : "목차 접기"}</span>
             </button>
           </div>
         </div>
@@ -168,12 +168,29 @@ export const ReportPreview: React.FC<ReportPreviewProps> = ({
           </h1>
           <div className="sample-cover-subtitle">참관 정리 리포트</div>
 
+          {/* 선택적 차수 및 키워드 메모 표시 영역 (기본 미출력) */}
+          {cover.revisionInfo && cover.revisionInfo.showOnCover === true && (
+            <div className="sample-cover-revision-pill">
+              <span className="rev-badge-tag">
+                {cover.revisionInfo.versionLabel || `제${cover.revisionInfo.versionNumber}차`}
+              </span>
+              {cover.revisionInfo.memoKeyword && (
+                <span className="rev-badge-memo">
+                  {cover.revisionInfo.memoKeyword}
+                </span>
+              )}
+            </div>
+          )}
+
           <div className="sample-cover-info-box">
-            <p className="sample-cover-meta-line">
-              {cover.dateRange || "2026.08.19(수) – 08.21(금)"} · {cover.location || "서울 코엑스(COEX) Hall B"}
+            <p className="sample-cover-meta-line sample-cover-meta-date">
+              {cover.dateRange || "2026.08.19(수) – 08.21(금)"}
+            </p>
+            <p className="sample-cover-meta-line sample-cover-meta-location">
+              {cover.location || "서울 코엑스(COEX) Hall B"}
             </p>
             <p className="sample-cover-desc-line">
-              카탈로그익스프레스가 현장 프로그램북과 온라인 팩트체크를 바탕으로 정리했습니다
+              현장에서 직접 수집한 전 부스 카탈로그와 현장 참관 기록을 바탕으로 정리했습니다.
             </p>
           </div>
         </div>
@@ -243,7 +260,7 @@ export const ReportPreview: React.FC<ReportPreviewProps> = ({
             <div className="toc-card-content">
               <h3 className="toc-card-title">주목할 부스 기업 Pick</h3>
               <p className="toc-card-desc">
-                혁신성 및 당사 비즈니스 연계 가치가 높은 {ch04.companies?.length ? `${ch04.companies.length}개` : "10개"} 핵심 참가기업 심층 분석 (왜 주목할까)
+                혁신성 및 비즈니스 연계 가치가 높은 {ch04.companies?.length ? `${ch04.companies.length}개` : "10개"} 핵심 참가기업 심층 분석 (왜 주목할까)
               </p>
             </div>
           </div>

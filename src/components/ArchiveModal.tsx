@@ -6,6 +6,8 @@ import { defaultReport } from "@/data/sampleReport";
 import { quantumExpoReport } from "@/data/quantumReport";
 import { aiFestaReport } from "@/data/aiFestaReport";
 import { hansangReport } from "@/data/hansangReport";
+import { slwReport } from "@/data/slwReport";
+import { getRevisions } from "@/utils/revisionStorage";
 
 interface ArchiveModalProps {
   isOpen: boolean;
@@ -43,6 +45,7 @@ export const ArchiveModal: React.FC<ArchiveModalProps> = ({
   const loadArchiveList = () => {
     try {
       // Always sync preset reports with latest data definitions
+      localStorage.setItem(`exhi_doc_${slwReport.id}`, JSON.stringify(slwReport));
       localStorage.setItem(`exhi_doc_${hansangReport.id}`, JSON.stringify(hansangReport));
       localStorage.setItem(`exhi_doc_${aiFestaReport.id}`, JSON.stringify(aiFestaReport));
       localStorage.setItem(`exhi_doc_${quantumExpoReport.id}`, JSON.stringify(quantumExpoReport));
@@ -51,9 +54,20 @@ export const ArchiveModal: React.FC<ArchiveModalProps> = ({
       const savedIndex = localStorage.getItem(ARCHIVE_INDEX_KEY);
       let list: ArchiveItemMeta[] = savedIndex ? JSON.parse(savedIndex) : [];
 
+      // Ensure SLW Report is registered at top
+      if (!list.some((item) => item.id === slwReport.id)) {
+        list.unshift({
+          id: slwReport.id,
+          title: slwReport.cover.title,
+          eventName: slwReport.ch01.eventName,
+          dates: slwReport.cover.dateRange,
+          savedAt: slwReport.updatedAt || "2026-10-07",
+        });
+      }
+
       // Ensure Hansang Report is registered
       if (!list.some((item) => item.id === hansangReport.id)) {
-        list.unshift({
+        list.push({
           id: hansangReport.id,
           title: hansangReport.cover.title,
           eventName: hansangReport.ch01.eventName,
@@ -215,6 +229,27 @@ export const ArchiveModal: React.FC<ArchiveModalProps> = ({
                     <span style={{ fontSize: "0.72rem", color: "var(--color-text-muted)" }}>
                       저장일자: {item.savedAt}
                     </span>
+                    {(() => {
+                      const revList = getRevisions(item.id);
+                      if (revList.length === 0) return null;
+                      return (
+                        <div style={{ marginTop: "6px", display: "flex", gap: "6px", alignItems: "center", flexWrap: "wrap" }}>
+                          <span style={{ fontSize: "0.72rem", background: "#f0fdf4", color: "#166534", padding: "1px 6px", borderRadius: "4px", fontWeight: 700, border: "1px solid #bbf7d0" }}>
+                            🔖 {revList[0].versionLabel}
+                          </span>
+                          {revList[0].memoKeyword && (
+                            <span style={{ fontSize: "0.72rem", color: "#334155", fontWeight: 500 }}>
+                              {revList[0].memoKeyword}
+                            </span>
+                          )}
+                          {revList.length > 1 && (
+                            <span style={{ fontSize: "0.7rem", color: "#64748b" }}>
+                              (총 {revList.length}개 차수)
+                            </span>
+                          )}
+                        </div>
+                      );
+                    })()}
                   </div>
                   <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
                     {item.id === currentReport.id && (

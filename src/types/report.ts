@@ -1,3 +1,24 @@
+export interface RevisionInfo {
+  versionNumber: number; // 예: 1, 2, 3
+  versionLabel: string;  // 예: "1차", "2차 개정본", "최종본"
+  memoKeyword?: string;  // 간단 키워드 메모 (예: "산업동향 심층 보강본")
+  showOnCover?: boolean; // 표지에 차수 및 키워드 메모 출력/미출력 선택 옵션
+}
+
+export interface ReportRevisionMeta {
+  revisionId: string;    // 예: "rev-1728198000000"
+  exhibitionId: string;  // 예: "report-ai-festa-2026"
+  versionNumber: number;
+  versionLabel: string;
+  memoKeyword: string;
+  savedAt: string;       // 예: "2026-10-06 15:30"
+  showOnCover: boolean;  // 표지 출력 여부
+}
+
+export interface ReportRevisionSnapshot extends ReportRevisionMeta {
+  doc: ExhibitionReportDoc;
+}
+
 export interface ReportCover {
   title: string;
   subtitle: string;
@@ -9,6 +30,7 @@ export interface ReportCover {
   issueDate: string;
   contactEmail: string;
   website: string;
+  revisionInfo?: RevisionInfo;
 }
 
 export interface MetricItem {
