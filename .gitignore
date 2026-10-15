@@ -46,3 +46,4 @@ next-env.d.ts
 
 # Scratch scripts and temporary files
 scratch/
+catalog_scans/

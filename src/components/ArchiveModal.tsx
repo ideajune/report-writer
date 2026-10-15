@@ -7,6 +7,7 @@ import { quantumExpoReport } from "@/data/quantumReport";
 import { aiFestaReport } from "@/data/aiFestaReport";
 import { hansangReport } from "@/data/hansangReport";
 import { slwReport } from "@/data/slwReport";
+import { kesReport } from "@/data/kesReport";
 import { getRevisions } from "@/utils/revisionStorage";
 
 interface ArchiveModalProps {
@@ -45,6 +46,7 @@ export const ArchiveModal: React.FC<ArchiveModalProps> = ({
   const loadArchiveList = () => {
     try {
       // Always sync preset reports with latest data definitions
+      localStorage.setItem(`exhi_doc_${kesReport.id}`, JSON.stringify(kesReport));
       localStorage.setItem(`exhi_doc_${slwReport.id}`, JSON.stringify(slwReport));
       localStorage.setItem(`exhi_doc_${hansangReport.id}`, JSON.stringify(hansangReport));
       localStorage.setItem(`exhi_doc_${aiFestaReport.id}`, JSON.stringify(aiFestaReport));
@@ -54,9 +56,20 @@ export const ArchiveModal: React.FC<ArchiveModalProps> = ({
       const savedIndex = localStorage.getItem(ARCHIVE_INDEX_KEY);
       let list: ArchiveItemMeta[] = savedIndex ? JSON.parse(savedIndex) : [];
 
-      // Ensure SLW Report is registered at top
-      if (!list.some((item) => item.id === slwReport.id)) {
+      // Ensure KES 2026 Report is registered at top
+      if (!list.some((item) => item.id === kesReport.id)) {
         list.unshift({
+          id: kesReport.id,
+          title: kesReport.cover.title,
+          eventName: kesReport.ch01.eventName,
+          dates: kesReport.cover.dateRange,
+          savedAt: kesReport.updatedAt || "2026-10-12",
+        });
+      }
+
+      // Ensure SLW Report is registered
+      if (!list.some((item) => item.id === slwReport.id)) {
+        list.push({
           id: slwReport.id,
           title: slwReport.cover.title,
           eventName: slwReport.ch01.eventName,

@@ -7,6 +7,7 @@ import { quantumExpoReport } from "@/data/quantumReport";
 import { aiFestaReport } from "@/data/aiFestaReport";
 import { hansangReport } from "@/data/hansangReport";
 import { slwReport } from "@/data/slwReport";
+import { kesReport } from "@/data/kesReport";
 import { ArchiveItemMeta } from "./ArchiveModal";
 import { NewRevisionModal } from "./NewRevisionModal";
 import {
@@ -127,8 +128,17 @@ export const Header: React.FC<HeaderProps> = ({
       const savedIndex = localStorage.getItem("exhi_reports_archive_index_v1");
       let list: ArchiveItemMeta[] = savedIndex ? JSON.parse(savedIndex) : [];
 
-      if (!list.some((item) => item.id === slwReport.id)) {
+      if (!list.some((item) => item.id === kesReport.id)) {
         list.unshift({
+          id: kesReport.id,
+          title: "한국전자전(KES 2026)",
+          eventName: kesReport.ch01.eventName,
+          dates: kesReport.cover.dateRange,
+          savedAt: kesReport.updatedAt || "2026-10",
+        });
+      }
+      if (!list.some((item) => item.id === slwReport.id)) {
+        list.push({
           id: slwReport.id,
           title: "스마트라이프위크 2026",
           eventName: slwReport.ch01.eventName,
@@ -175,6 +185,13 @@ export const Header: React.FC<HeaderProps> = ({
       setExhibitions(list);
     } catch {
       setExhibitions([
+        {
+          id: kesReport.id,
+          title: "한국전자전(KES 2026)",
+          eventName: kesReport.ch01.eventName,
+          dates: kesReport.cover.dateRange,
+          savedAt: "2026-10",
+        },
         {
           id: slwReport.id,
           title: "스마트라이프위크 2026",
@@ -223,6 +240,10 @@ export const Header: React.FC<HeaderProps> = ({
 
   const handleSelect = (item: ArchiveItemMeta) => {
     setIsDropdownOpen(false);
+    if (item.id === kesReport.id) {
+      onSelectReport(kesReport);
+      return;
+    }
     if (item.id === slwReport.id) {
       onSelectReport(slwReport);
       return;
@@ -261,7 +282,9 @@ export const Header: React.FC<HeaderProps> = ({
   };
 
   const currentTitle =
-    currentReportId === slwReport.id
+    currentReportId === kesReport.id
+      ? "한국전자전(KES 2026)"
+      : currentReportId === slwReport.id
       ? "스마트라이프위크 2026"
       : currentReportId === hansangReport.id
       ? "제24차 세계한상대회"
@@ -274,7 +297,9 @@ export const Header: React.FC<HeaderProps> = ({
       : "전시회 선택";
 
   const currentIcon =
-    currentReportId === slwReport.id
+    currentReportId === kesReport.id
+      ? "⚡"
+      : currentReportId === slwReport.id
       ? "🏙️"
       : currentReportId === hansangReport.id
       ? "🌐"

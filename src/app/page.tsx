@@ -7,6 +7,7 @@ import { quantumExpoReport } from "@/data/quantumReport";
 import { aiFestaReport } from "@/data/aiFestaReport";
 import { hansangReport } from "@/data/hansangReport";
 import { slwReport } from "@/data/slwReport";
+import { kesReport } from "@/data/kesReport";
 import { Header } from "@/components/Header";
 import { Editor } from "@/components/Editor";
 import { ReportPreview } from "@/components/ReportPreview";
@@ -45,7 +46,11 @@ export default function Home() {
     if (activeDocId && saved) {
       try {
         let parsed = JSON.parse(saved);
-        if (parsed.id === slwReport.id) {
+        if (parsed.id === kesReport.id) {
+          parsed = kesReport;
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(kesReport));
+          localStorage.setItem(`exhi_doc_${kesReport.id}`, JSON.stringify(kesReport));
+        } else if (parsed.id === slwReport.id) {
           parsed = slwReport;
           localStorage.setItem(STORAGE_KEY, JSON.stringify(slwReport));
           localStorage.setItem(`exhi_doc_${slwReport.id}`, JSON.stringify(slwReport));
@@ -57,6 +62,10 @@ export default function Home() {
           parsed = quantumExpoReport;
           localStorage.setItem(STORAGE_KEY, JSON.stringify(quantumExpoReport));
           localStorage.setItem(`exhi_doc_${quantumExpoReport.id}`, JSON.stringify(quantumExpoReport));
+        } else if (parsed.id === aiFestaReport.id) {
+          parsed = aiFestaReport;
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(aiFestaReport));
+          localStorage.setItem(`exhi_doc_${aiFestaReport.id}`, JSON.stringify(aiFestaReport));
         }
         setReport(parsed);
         setLastSaved("방금");
@@ -65,7 +74,7 @@ export default function Home() {
         console.error("Failed to load saved report draft", e);
       }
     }
-    // Default to SLW Report on initial load
+    // Default to SLW 2026 Report on initial load
     setReport(slwReport);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(slwReport));
     localStorage.setItem(ACTIVE_DOC_KEY, slwReport.id);
