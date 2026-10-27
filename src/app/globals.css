@@ -85,10 +85,29 @@ body {
   letter-spacing: 0.5px;
 }
 
-.header-brand h1 {
-  font-size: 1.05rem;
+.header-brand-title-group {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+}
+
+.header-brand-title-group h1 {
+  font-size: 1.02rem;
   font-weight: 700;
   color: #FFFFFF;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.header-brand-title-group .save-pill {
+  font-size: 0.68rem;
+  color: #94A3B8;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0;
+  line-height: 1;
 }
 
 .header-actions {
@@ -1289,93 +1308,137 @@ body {
 }
 
 /* ========================================================
-   CHAPTER 01 OVERVIEW SHEET OPTIMIZATION (Prevent Overflow)
+   CHAPTER 01 OVERVIEW SHEET OPTIMIZATION (Balanced Executive Layout)
    ======================================================== */
+.ch01-sheet {
+  padding: 16mm 18mm 12mm 18mm !important;
+}
+
 .ch01-sheet .chapter-header {
-  margin-bottom: 8px;
+  margin-bottom: 10px;
   padding-bottom: 6px;
 }
 
+/* 1. 기본 정보 테이블 - 여유롭고 가독성 높은 여백 및 행간 */
 .ch01-table {
-  margin: 6px 0 !important;
-  font-size: 0.77rem;
+  margin: 8px 0 12px 0 !important;
+  font-size: 0.81rem !important;
+  border-collapse: collapse;
 }
 
 .ch01-table th,
 .ch01-table td {
-  padding: 5px 10px;
-  line-height: 1.35;
+  padding: 7px 11px !important;
+  line-height: 1.42 !important;
+  vertical-align: middle;
 }
 
+.ch01-table th {
+  background-color: #F8FAFC !important;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.ch01-table td strong {
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+/* 2. 핵심 지표 4-Grid - 균형 잡힌 카드 패딩 및 폰트 */
 .ch01-metrics-grid {
-  margin: 8px 0;
-  gap: 8px;
+  display: flex !important;
+  flex-direction: row !important;
+  gap: 8px !important;
+  margin: 10px 0 12px 0 !important;
 }
 
 .ch01-metrics-grid .metric-card {
-  padding: 7px 6px;
+  flex: 1 1 0 !important;
+  min-width: 0 !important;
+  padding: 9px 6px !important;
+  border-radius: var(--radius-sm);
+  background-color: #FFFFFF;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .ch01-metrics-grid .metric-card-label {
   font-size: 0.70rem;
-  margin-bottom: 2px;
+  font-weight: 600;
+  color: var(--color-text-sub);
+  margin-bottom: 3px;
 }
 
 .ch01-metrics-grid .metric-card-value {
-  font-size: 0.98rem;
-  margin-bottom: 2px;
+  font-size: 1.0rem;
+  font-weight: 800;
+  color: var(--color-primary);
+  margin-bottom: 3px;
+  letter-spacing: -0.3px;
 }
 
 .ch01-metrics-grid .metric-badge {
-  font-size: 0.64rem;
+  font-size: 0.65rem;
+  font-weight: 700;
   padding: 1px 5px;
 }
 
 .ch01-metrics-grid .metric-sub {
-  font-size: 0.63rem;
-  margin-top: 2px;
+  font-size: 0.64rem;
+  color: var(--color-text-muted);
+  margin-top: 3px;
+  line-height: 1.3;
 }
 
+/* 3. 차별화 팩트체크 콜아웃 박스 - 편안한 여백과 폰트 크기 */
 .ch01-callout {
-  margin: 8px 0;
-  padding: 7px 12px;
-  font-size: 0.76rem;
-  line-height: 1.45;
+  margin: 10px 0 14px 0 !important;
+  padding: 9px 14px !important;
+  font-size: 0.78rem !important;
+  line-height: 1.5 !important;
 }
 
 .ch01-callout .callout-box-title {
-  font-size: 0.79rem;
-  margin-bottom: 3px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  margin-bottom: 4px;
 }
 
+/* 4. 현장 스케치 사진 영역 - 사진 높이를 120px로 확장하여 하단 여백 채움 */
 .ch01-sketches-title {
-  font-size: 0.80rem;
+  font-size: 0.84rem;
   font-weight: 700;
-  margin: 6px 0 4px;
+  margin: 10px 0 6px 0;
   color: var(--color-primary);
 }
 
 .ch01-sketch-grid {
-  margin: 4px 0 6px 0;
+  margin: 0 0 10px 0;
   gap: 8px;
 }
 
 .ch01-sketch-card {
   display: flex;
   flex-direction: column;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background-color: #FFFFFF;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
 }
 
 .ch01-sketch-img {
-  height: 96px !important;
+  height: 120px !important;
   width: 100%;
   object-fit: cover;
   display: block;
 }
 
 .ch01-sketch-caption {
-  font-size: 0.68rem;
-  padding: 4px 8px;
-  line-height: 1.32;
+  font-size: 0.69rem;
+  padding: 5px 8px;
+  line-height: 1.35;
+  background-color: #F8FAFC;
+  border-top: 1px solid var(--color-border);
   white-space: normal;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -1386,7 +1449,7 @@ body {
 
 .ch01-sheet .sheet-page-footer {
   margin-top: auto;
-  padding-top: 4px;
+  padding-top: 6px;
   padding-bottom: 2px;
 }
 
@@ -1503,29 +1566,48 @@ body {
   text-align: right;
 }
 
+/* ========================================================
+   CHAPTER 05 TRENDS & CONCLUSION OPTIMIZATION
+   ======================================================== */
+article[id^="print-ch05"] {
+  padding: 13mm 16mm 9mm 16mm !important;
+}
+
+article[id^="print-ch05"] .chapter-header {
+  margin-bottom: 8px !important;
+  padding-bottom: 5px !important;
+}
+
+article[id^="print-ch05"] .trends-container {
+  display: flex;
+  flex-direction: column;
+}
+
 /* Trend Item Block */
 .trend-block {
-  margin-bottom: 14px;
+  margin-bottom: 10px;
   border-bottom: 1px solid var(--color-border);
-  padding-bottom: 12px;
+  padding-bottom: 8px;
   break-inside: avoid;
 }
 
 .trend-block:last-child {
   border-bottom: none;
+  margin-bottom: 4px;
+  padding-bottom: 0;
 }
 
 .trend-title-line {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }
 
 .trend-badge {
   background-color: var(--color-primary);
   color: #FFFFFF;
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   font-weight: 800;
   padding: 2px 6px;
   border-radius: 4px;
@@ -1533,16 +1615,16 @@ body {
 }
 
 .trend-title-text {
-  font-size: 0.92rem;
+  font-size: 0.88rem;
   font-weight: 700;
   color: var(--color-primary);
 }
 
 .trend-body {
-  font-size: 0.8rem;
+  font-size: 0.77rem;
   color: #334155;
-  line-height: 1.55;
-  margin-bottom: 6px;
+  line-height: 1.48;
+  margin-bottom: 5px;
 }
 
 /* Fact Check Callout */
@@ -1550,43 +1632,45 @@ body {
   background-color: #FEF3C7;
   border: 1px solid #F59E0B;
   border-radius: var(--radius-sm);
-  padding: 8px 12px;
-  margin: 6px 0;
-  font-size: 0.76rem;
+  padding: 6px 11px;
+  margin: 5px 0;
+  font-size: 0.73rem;
   color: #78350F;
-  line-height: 1.45;
+  line-height: 1.4;
 }
 
 .factcheck-title {
   font-weight: 700;
-  margin-bottom: 3px;
+  margin-bottom: 2px;
   display: flex;
   align-items: center;
   gap: 6px;
+  font-size: 0.75rem;
 }
 
 /* Conclusion Box */
 .conclusion-box {
   background: linear-gradient(135deg, #0F172A, #1E293B);
   color: #F8FAFC;
-  padding: 14px 18px;
+  padding: 11px 15px;
   border-radius: var(--radius-md);
-  margin-top: 14px;
-  font-size: 0.82rem;
-  line-height: 1.55;
-  border-left: 5px solid #38BDF8;
+  margin-top: 8px;
+  font-size: 0.76rem;
+  line-height: 1.45;
+  border-left: 4px solid #38BDF8;
 }
 
 .conclusion-title {
-  font-size: 0.92rem;
+  font-size: 0.86rem;
   font-weight: 800;
   color: #38BDF8;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }
 
 .conclusion-box p {
   white-space: pre-line;
-  line-height: 1.6;
+  line-height: 1.48;
+  margin: 0;
 }
 
 /* Guide & Archive Page (Chapter 06 Style Matching Sample PDF 100%) */
@@ -1831,6 +1915,30 @@ body {
   background: #e0f2fe !important;
 }
 
+.rev-save-current-btn {
+  background: linear-gradient(135deg, #059669, #047857) !important;
+  color: #ffffff !important;
+  border: 1px solid #34d399 !important;
+  font-weight: 700 !important;
+  box-shadow: 0 1px 4px rgba(5, 150, 105, 0.35) !important;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.rev-save-current-btn:hover {
+  background: linear-gradient(135deg, #047857, #065f46) !important;
+  border-color: #6ee7b7 !important;
+  box-shadow: 0 3px 8px rgba(5, 150, 105, 0.45) !important;
+  transform: translateY(-1px);
+}
+
+.rev-save-current-btn:active {
+  transform: translateY(0);
+}
+
 .revision-dropdown-menu {
   position: absolute;
   top: calc(100% + 6px);
@@ -1843,6 +1951,22 @@ body {
   z-index: 1000;
   padding: 10px;
   animation: dropdownFadeIn 0.15s ease-out;
+}
+
+.rev-inline-save-btn {
+  background: #059669;
+  color: #ffffff;
+  border: none;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.rev-inline-save-btn:hover {
+  background: #047857;
 }
 
 .rev-inline-add-btn {
@@ -1859,6 +1983,37 @@ body {
 
 .rev-inline-add-btn:hover {
   background: #0369a1;
+}
+
+/* Floating Save Toast Notification */
+.revision-save-toast {
+  position: fixed;
+  top: 72px;
+  right: 24px;
+  background: #064e3b;
+  color: #ecfdf5;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-size: 0.84rem;
+  font-weight: 600;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25), 0 4px 10px rgba(6, 78, 59, 0.35);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 9999;
+  border: 1px solid #10b981;
+  animation: slideInDown 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .rev-cover-toggle-box {
@@ -2093,13 +2248,19 @@ body {
     page-break-inside: avoid !important;
   }
 
-  .ch01-sheet .sheet-page-footer {
-    padding-top: 2mm !important;
-    padding-bottom: 1mm !important;
+  .ch01-sheet,
+  article[id^="print-ch05"] {
+    padding: 12mm 14mm 8mm 14mm !important;
+  }
+
+  .ch01-sheet .sheet-page-footer,
+  article[id^="print-ch05"] .sheet-page-footer {
+    padding-top: 1mm !important;
+    padding-bottom: 0mm !important;
   }
 
   .ch01-sketch-img {
-    height: 94px !important;
+    height: 80px !important;
   }
 
   .pick-card,

@@ -8,16 +8,18 @@ import { aiFestaReport } from "@/data/aiFestaReport";
 import { hansangReport } from "@/data/hansangReport";
 import { slwReport } from "@/data/slwReport";
 import { kesReport } from "@/data/kesReport";
+import { kecoReport } from "@/data/kecoReport";
+import { sedexReport } from "@/data/sedexReport";
 import { Header } from "@/components/Header";
 import { Editor } from "@/components/Editor";
 import { ReportPreview } from "@/components/ReportPreview";
 import { ArchiveModal } from "@/components/ArchiveModal";
 
-const STORAGE_KEY = "exhi_current_report_draft_v8";
-const ACTIVE_DOC_KEY = "exhi_active_doc_id_v8";
+const STORAGE_KEY = "exhi_current_report_draft_v9";
+const ACTIVE_DOC_KEY = "exhi_active_doc_id_v9";
 
 export default function Home() {
-  const [report, setReport] = useState<ExhibitionReportDoc>(slwReport);
+  const [report, setReport] = useState<ExhibitionReportDoc>(sedexReport);
   const [viewMode, setViewMode] = useState<"split" | "editor" | "preview">("split");
   const [lastSaved, setLastSaved] = useState<string>("");
   const [mounted, setMounted] = useState<boolean>(false);
@@ -26,7 +28,7 @@ export default function Home() {
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [includePhotos, setIncludePhotos] = useState<boolean>(true);
 
-  // Initialize from LocalStorage or default to Smart Life Week 2026 report
+  // Initialize from LocalStorage or default to SEDEX 2026 report
   useEffect(() => {
     setMounted(true);
     const activeDocId = localStorage.getItem(ACTIVE_DOC_KEY);
@@ -43,13 +45,49 @@ export default function Home() {
       }
     }
 
+    // Check URL parameters for explicit document switching (e.g. ?doc=sedex)
+    const urlParams = new URLSearchParams(window.location.search);
+    const docParam = urlParams.get("doc");
+    if (docParam === "sedex" || docParam === sedexReport.id) {
+      setReport(sedexReport);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(sedexReport));
+      localStorage.setItem(ACTIVE_DOC_KEY, sedexReport.id);
+      localStorage.setItem(`exhi_doc_${sedexReport.id}`, JSON.stringify(sedexReport));
+      setLastSaved("방금");
+      return;
+    }
+    if (docParam === "kes" || docParam === kesReport.id) {
+      setReport(kesReport);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(kesReport));
+      localStorage.setItem(ACTIVE_DOC_KEY, kesReport.id);
+      localStorage.setItem(`exhi_doc_${kesReport.id}`, JSON.stringify(kesReport));
+      setLastSaved("방금");
+      return;
+    }
+    if (docParam === "keco" || docParam === kecoReport.id) {
+      setReport(kecoReport);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(kecoReport));
+      localStorage.setItem(ACTIVE_DOC_KEY, kecoReport.id);
+      localStorage.setItem(`exhi_doc_${kecoReport.id}`, JSON.stringify(kecoReport));
+      setLastSaved("방금");
+      return;
+    }
+
     if (activeDocId && saved) {
       try {
         let parsed = JSON.parse(saved);
-        if (parsed.id === kesReport.id) {
+        if (parsed.id === sedexReport.id) {
+          parsed = sedexReport;
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(sedexReport));
+          localStorage.setItem(`exhi_doc_${sedexReport.id}`, JSON.stringify(sedexReport));
+        } else if (parsed.id === kesReport.id) {
           parsed = kesReport;
           localStorage.setItem(STORAGE_KEY, JSON.stringify(kesReport));
           localStorage.setItem(`exhi_doc_${kesReport.id}`, JSON.stringify(kesReport));
+        } else if (parsed.id === kecoReport.id) {
+          parsed = kecoReport;
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(kecoReport));
+          localStorage.setItem(`exhi_doc_${kecoReport.id}`, JSON.stringify(kecoReport));
         } else if (parsed.id === slwReport.id) {
           parsed = slwReport;
           localStorage.setItem(STORAGE_KEY, JSON.stringify(slwReport));
@@ -74,11 +112,11 @@ export default function Home() {
         console.error("Failed to load saved report draft", e);
       }
     }
-    // Default to SLW 2026 Report on initial load
-    setReport(slwReport);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(slwReport));
-    localStorage.setItem(ACTIVE_DOC_KEY, slwReport.id);
-    localStorage.setItem(`exhi_doc_${slwReport.id}`, JSON.stringify(slwReport));
+    // Default to SEDEX 2026 Report on initial load
+    setReport(sedexReport);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(sedexReport));
+    localStorage.setItem(ACTIVE_DOC_KEY, sedexReport.id);
+    localStorage.setItem(`exhi_doc_${sedexReport.id}`, JSON.stringify(sedexReport));
     setLastSaved("방금");
   }, []);
 

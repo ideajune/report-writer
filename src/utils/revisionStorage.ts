@@ -126,6 +126,95 @@ export function saveNewRevision(
 }
 
 /**
+ * 현재 활성 차수 업데이트 저장 (현재 페이지/에디터 수정사항 덮어쓰기 저장)
+ */
+export function saveCurrentRevision(
+  exhibitionId: string,
+  doc: ExhibitionReportDoc
+): { updatedDoc: ExhibitionReportDoc; revision: ReportRevisionMeta } {
+  if (typeof window === "undefined") {
+    return {
+      updatedDoc: doc,
+      revision: {
+        revisionId: `rev-${exhibitionId}-v1`,
+        exhibitionId,
+        versionNumber: doc.cover.revisionInfo?.versionNumber || 1,
+        versionLabel: doc.cover.revisionInfo?.versionLabel || "1차",
+        memoKeyword: doc.cover.revisionInfo?.memoKeyword || "현장 수집 및 보고서 기본 초안",
+        savedAt: new Date().toISOString().replace("T", " ").substring(0, 16),
+        showOnCover: doc.cover.revisionInfo?.showOnCover ?? false,
+      },
+    };
+  }
+
+  const currentList = getRevisions(exhibitionId, doc);
+  const activeId = getActiveRevisionId(exhibitionId);
+
+  // 대상 차수 매칭: 1) activeId와 일치 2) doc.cover.revisionInfo.versionNumber와 일치 3) 첫 번째 항목
+  let targetIndex = -1;
+  if (activeId) {
+    targetIndex = currentList.findIndex((item) => item.revisionId === activeId);
+  }
+  if (targetIndex === -1 && doc.cover.revisionInfo?.versionNumber) {
+    targetIndex = currentList.findIndex(
+      (item) => item.versionNumber === doc.cover.revisionInfo?.versionNumber
+    );
+  }
+  if (targetIndex === -1 && currentList.length > 0) {
+    targetIndex = 0;
+  }
+
+  const now = new Date();
+  const dateStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")} ${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
+
+  let targetRev: ReportRevisionMeta;
+  if (targetIndex !== -1) {
+    targetRev = {
+      ...currentList[targetIndex],
+      savedAt: dateStr,
+      memoKeyword: doc.cover.revisionInfo?.memoKeyword || currentList[targetIndex].memoKeyword || "수정 업데이트",
+      versionLabel: doc.cover.revisionInfo?.versionLabel || currentList[targetIndex].versionLabel || `${currentList[targetIndex].versionNumber}차`,
+      showOnCover: doc.cover.revisionInfo?.showOnCover ?? currentList[targetIndex].showOnCover ?? false,
+    };
+    currentList[targetIndex] = targetRev;
+  } else {
+    // 저장된 차수 목록이 없던 경우 초기 1차 생성 후 진행
+    const initList = initFirstRevision(exhibitionId, doc);
+    targetRev = {
+      ...initList[0],
+      savedAt: dateStr,
+    };
+    currentList.push(targetRev);
+  }
+
+  const updatedDoc: ExhibitionReportDoc = {
+    ...doc,
+    updatedAt: dateStr.split(" ")[0],
+    cover: {
+      ...doc.cover,
+      revisionInfo: {
+        versionNumber: targetRev.versionNumber,
+        versionLabel: targetRev.versionLabel,
+        memoKeyword: targetRev.memoKeyword,
+        showOnCover: targetRev.showOnCover,
+      },
+    },
+  };
+
+  try {
+    localStorage.setItem(`${REV_INDEX_PREFIX}${exhibitionId}`, JSON.stringify(currentList));
+    localStorage.setItem(`${REV_SNAP_PREFIX}${exhibitionId}_${targetRev.revisionId}`, JSON.stringify(updatedDoc));
+    localStorage.setItem(`${ACTIVE_REV_PREFIX}${exhibitionId}`, targetRev.revisionId);
+    localStorage.setItem(`exhi_doc_${exhibitionId}`, JSON.stringify(updatedDoc));
+    localStorage.setItem("exhi_current_report_draft_v9", JSON.stringify(updatedDoc));
+  } catch (e) {
+    console.error("Failed to save current revision", e);
+  }
+
+  return { updatedDoc, revision: targetRev };
+}
+
+/**
  * 특정 차수의 스냅샷 문서 원본 로드
  */
 export function getRevisionSnapshot(exhibitionId: string, revisionId: string): ExhibitionReportDoc | null {
